@@ -13,7 +13,7 @@
 - Unit + Integration Testing
 - Better docs
 - Optimize even more for size and speed (leaner code)
-- Finish SSR + Vite plugin
+- Finish SSR + Vite plugin `@swrf/ssr`
 - Server-side real-time refs
 - Smarter HMR without transforms
 - GitHub actions
