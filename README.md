@@ -20,7 +20,7 @@
 - Better README with badges
 - Test using webpack (now only vite is supported)
 
-## Start Swrfing Now! 🏄‍♂️
+## 🏄‍♂️ Start Swrfing!
 
 ```sh
 npm i @swrf/core
