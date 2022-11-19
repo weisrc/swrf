@@ -18,6 +18,12 @@
 - Smarter HMR without transforms
 - GitHub actions
 
+## Start Swrfing Now! 🏄‍♂️
+
+```sh
+npm i @swrf/core
+```
+
 ```ts
 import { elements, attributes } from "swrf";
 const { button } = elements;
