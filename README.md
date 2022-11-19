@@ -2,13 +2,21 @@
 
 ## 🌊 Speedy Web Reactive Framework 🏖️
 
-## 🚧 Under development, PRs are welcomed!
-
 - Pronouced as **surf**, /sərf/
 - Truly **reactive**
 - We love **functions**
 - 90% **tree-shakeable**
 - All in one **Ethernet frame**
+
+## 🚧 Under development, PRs are welcomed!
+
+- Unit + Integration Testing
+- Better docs
+- Optimize even more for size and speed (leaner code)
+- Finish SSR + Vite plugin
+- Server-side real-time refs
+- Smarter HMR without transforms
+- GitHub actions
 
 ```ts
 import { elements, attributes } from "swrf";
@@ -77,11 +85,24 @@ const div = h("div", { style: { color } }, "I am red");
 ## Hot Reload
 
 This library has somewhat of a hot reload module feature, but it is limited.
+
 - Only refs are kept, everything else is reloaded
 - Rerenders even unaffected elements
 - Needs render-time deterministic components (no `Math.random`)
 
 However, on the bright side:
+
 - No transpiler magic
 - No plugins, only need `import.meta.hot.accept(() => {})` next to `render`.
 
+## Contribute
+
+Please :)
+
+- Monorepo using npm
+- Tests
+- Thank you!
+
+## License
+
+MIT. Wei (weisrc)
