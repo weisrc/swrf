@@ -27,7 +27,7 @@ npm i @swrf/core
 ```
 
 ```ts
-import { elements, attributes } from "swrf";
+import { elements, attributes } from "@swrf/core";
 const { button } = elements;
 const { onclick } = attributes;
 function counter() {
@@ -42,7 +42,7 @@ Or using JSX with transpiler magic:
 
 ```tsx
 /* @jsx h */
-import { h } from "swrf";
+import { h } from "@swrf/core";
 function Counter() {
 	const count = ref(0);
 	const increment = () => count(count() + 1);
@@ -70,7 +70,7 @@ dist/swrf.dev.es.js   3.50 KiB / gzip: 1.38 KiB
 - `fx` observes changes in refs called synchronously within it
 
 ```ts
-import { ref, fx } from "swrf";
+import { ref, fx } from "@swrf/core";
 const count = ref(0); // initial value of 0
 fx(() => {
 	console.log("count=", count()); // prints count=0
@@ -95,7 +95,7 @@ console.log(get(count)); // prints 0
   - children are `Get<Node>`
 
 ```ts
-import { h } from "swrf";
+import { h } from "@swrf/core";
 const color = ref("red");
 const div = h("div", { style: { color } }, "I am red");
 ```
