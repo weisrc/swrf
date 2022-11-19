@@ -1,0 +1,9 @@
+{
+	"name": "@swrf/ssr",
+	"scripts": {
+		"test": "ts-node ./test"
+	},
+	"dependencies": {
+		"linkedom": "^0.14.19"
+	}
+}
