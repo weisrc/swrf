@@ -17,6 +17,8 @@
 - Server-side real-time refs
 - Smarter HMR without transforms
 - GitHub actions
+- Better README with badges
+- Test using webpack (now only vite is supported)
 
 ## Start Swrfing Now! 🏄‍♂️
 
@@ -46,6 +48,20 @@ function Counter() {
 	const increment = () => count(count() + 1);
 	return <button onclick={increment}>count={count}</button>;
 }
+```
+
+## Bundle Sizes
+
+```
+vite v3.2.3 building for production...
+✓ 12 modules transformed.
+dist/swrf.cjs.js   2.14 KiB / gzip: 1.02 KiB
+dist/swrf.es.js   3.08 KiB / gzip: 1.18 KiB
+dist/swrf.iife.js   2.09 KiB / gzip: 1.03 KiB
+dist/swrf.umd.js   2.26 KiB / gzip: 1.11 KiB
+vite v3.2.3 building for dev...
+✓ 16 modules transformed.
+dist/swrf.dev.es.js   3.50 KiB / gzip: 1.38 KiB
 ```
 
 ## Overview
