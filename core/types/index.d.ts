@@ -9,3 +9,4 @@ export { map } from "./map";
 export * from "./types";
 export { get, node } from "./utils";
 export { ref } from "./ref";
+export { render } from "./render";

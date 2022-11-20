@@ -1,6 +1,6 @@
 {
 	"name": "@swrf/core",
-	"version": "0.0.0",
+	"version": "0.0.1",
 	"types": "./types/index.d.ts",
 	"exports": {
 		"development": {
