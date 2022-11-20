@@ -89,7 +89,7 @@ console.log(get(count)); // prints 0
 ```
 
 - `h` is a mostly hyperscript compatible function that creates reactive elements
-  - attributes is `Get<Record<string, Get>>`
+  - attributes are `Get<Record<string, Get>>`
     - `style` can be `string | Record<string, Get<string>>`
     - `classList` is `Record<string, Get<boolean>>`, if true include in list, otherwise, exclude
   - children are `Get<Node>`
