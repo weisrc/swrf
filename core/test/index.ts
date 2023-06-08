@@ -12,7 +12,7 @@ import greetings from "./greetings";
 import { Test } from "./test";
 
 const { button, div, br, input } = elements;
-const { onclick, style } = attributes;
+const { onclick, style, onmount } = attributes;
 
 function counter() {
 	const array = ref<Ref<string>[]>(
@@ -47,15 +47,17 @@ function counter() {
 		button(onclick(shuffle), "shuffle"),
 		br(),
 		map(array, (n) => {
-			return div(
+			const e = div(
 				"value=",
 				n,
+				onmount(console.log),
 				input(bind(n)),
 				button(
 					onclick(() => array(array().filter((x) => x !== n))),
 					"remove"
 				)
 			);
+			return e;
 		}),
 		greetings({ name: text }, "wow"),
 		Test()

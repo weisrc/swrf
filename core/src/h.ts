@@ -1,5 +1,5 @@
 import { fx } from "./fx";
-import { ClassList, Tag, Style, Get, Init } from "./types";
+import { ClassList, Tag, Style, Get, Init, UPDATE_MOUNT, Element } from "./types";
 import { get, node } from "./utils";
 
 export function h<T extends Tag>(tag: T, ...inits: Get<Init<T>>[]): Node;
@@ -9,17 +9,33 @@ export function h<T extends (...a: any) => Node>(
 ): Node;
 export function h(tag: string | ((...a: any) => Node), ...inits: any): Node {
 	if (typeof tag === "function") return tag(...inits);
-	const el = document.createElement(tag);
+	const el = document.createElement(tag) as Element;
+
+	let wasConnected = false;
+	el[UPDATE_MOUNT] = () => {
+		if (wasConnected !== el.isConnected) {
+			if ((wasConnected = el.isConnected)) {
+				el.onmount?.(el);
+				el.childNodes.forEach((c) => (c as Element)[UPDATE_MOUNT]?.());
+			} else {
+				el.onunmount?.(el);
+			}
+		}
+	};
+
 	for (const init of inits) {
 		const empty = document.createTextNode("");
 		let old: Node = el.appendChild(empty);
 		fx(() => {
 			const got = node(get(init));
+
 			if (got instanceof Node) {
 				el.replaceChild(got, old);
+				el[UPDATE_MOUNT]?.();
 				old = got;
 			} else {
 				el.replaceChild(empty, old);
+				el[UPDATE_MOUNT]?.();
 				old = empty;
 				for (const key in got) {
 					const value = got[key as keyof typeof got];

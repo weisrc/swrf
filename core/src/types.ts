@@ -7,7 +7,7 @@ export type Get<T> = T | Fun<T>;
 export type Ref<T> = (update?: T) => T;
 
 export type Elements = {
-	[key in Tag]: Element<key>;
+	[key in Tag]: ElementFactory<key>;
 };
 
 export type Attributes<T extends Tag> = {
@@ -24,6 +24,14 @@ export type ClassList = {
 	[key in string]?: Get<boolean>;
 };
 
+export const UPDATE_MOUNT = Symbol();
+
+type MountAttributes = {
+	onmount?: (e: Element) => void;
+	onunmount?: (e: Element) => void;
+	[UPDATE_MOUNT]?: () => void;
+};
+
 export type AttributeMap<T extends Tag> = {
 	[key in keyof HTMLMap[T]]?: key extends `on${EventName}`
 		? HTMLMap[T][key]
@@ -32,10 +40,14 @@ export type AttributeMap<T extends Tag> = {
 		: key extends "classList"
 		? ClassList
 		: Get<HTMLMap[T][key]>;
-};
+} & MountAttributes;
 
-export type Child = string | number | Node | null | undefined;
+export type Element = HTMLElement & MountAttributes;
 
-export type Element<T extends Tag> = (...inits: Get<Init<T>>[]) => HTMLMap[T];
+export type Child = Element | string | number | null | undefined;
 
 export type Init<T extends Tag> = Child | AttributeMap<T>;
+
+export type ElementFactory<T extends Tag> = (
+	...inits: Get<Init<T>>[]
+) => HTMLMap[T];

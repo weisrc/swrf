@@ -1,5 +1,8 @@
-import { Fun } from "./types";
+import { Fun, UPDATE_MOUNT } from "./types";
 
 export const render = (fn: Fun<Node>, node: HTMLElement) => {
-	node.appendChild(fn());
+	const out = fn();
+	node.appendChild(out);
+	// @ts-expect-error - internal use only
+	out[UPDATE_MOUNT]();
 };
