@@ -1,53 +1,48 @@
 type HTMLMap = HTMLElementTagNameMap;
 type EventName = keyof HTMLElementEventMap;
 
-export type Tag = keyof HTMLMap;
-export type Fun<T> = () => T;
-export type Get<T> = T | Fun<T>;
-export type Ref<T> = (update?: T) => T;
+export type HTMLTag = keyof HTMLMap;
+export type Gettable<T> = T | (() => T);
+export type Signal<T> = (update?: T) => T;
 
-export type Elements = {
-	[key in Tag]: ElementFactory<key>;
+export type Tags = {
+	[key in HTMLTag]: (...inits: Gettable<Init<key>>[]) => HTMLMap[key];
 };
 
-export type Attributes<T extends Tag> = {
+export type Attributes<T extends HTMLTag> = {
 	[key in keyof AttributeMap<T>]-?: (
-		value: Get<AttributeMap<T>[key]>
-	) => Get<AttributeMap<T>>;
+		value: Gettable<AttributeMap<T>[key]>
+	) => Gettable<AttributeMap<T>>;
 };
 
 export type Style = {
-	[key in keyof CSSStyleDeclaration]?: Get<string>;
+	[key in keyof CSSStyleDeclaration]?: Gettable<string>;
 };
 
 export type ClassList = {
-	[key in string]?: Get<boolean>;
+	[key in string]?: Gettable<boolean>;
 };
 
 export const UPDATE_MOUNT = Symbol();
 
 type MountAttributes = {
-	onmount?: (e: Element) => void;
-	onunmount?: (e: Element) => void;
+	onmount?: (e: Elem) => void;
+	onunmount?: (e: Elem) => void;
 	[UPDATE_MOUNT]?: () => void;
 };
 
-export type AttributeMap<T extends Tag> = {
+export type AttributeMap<T extends HTMLTag> = {
 	[key in keyof HTMLMap[T]]?: key extends `on${EventName}`
 		? HTMLMap[T][key]
 		: key extends "style"
-		? Get<Style> | Get<string>
+		? Gettable<Style> | Gettable<string>
 		: key extends "classList"
 		? ClassList
-		: Get<HTMLMap[T][key]>;
+		: Gettable<HTMLMap[T][key]>;
 } & MountAttributes;
 
-export type Element = HTMLElement & MountAttributes;
+export type Elem = HTMLElement & MountAttributes;
 
-export type Child = Element | string | number | null | undefined;
+export type Child = Elem | string | number | null | undefined | boolean;
 
-export type Init<T extends Tag> = Child | AttributeMap<T>;
-
-export type ElementFactory<T extends Tag> = (
-	...inits: Get<Init<T>>[]
-) => HTMLMap[T];
+export type Init<T extends HTMLTag> = Child | AttributeMap<T>;

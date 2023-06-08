@@ -1,15 +1,15 @@
-import { ref as _ref } from "../ref";
-import { Ref } from "../types";
+import { createSignal as originalCreateSignal } from "../createSignal";
+import { Signal } from "../types";
 import { increaseRecoveredRefCount, isHMR, iterators } from "./render";
 
 const re = /([^(]+)@|at ([^(]+) \(/g;
 
 type Entry = {
 	i: number;
-	refs: [any, Ref<any>][];
+	signals: [any, Signal<any>][];
 };
 
-export const ref: typeof _ref = (data) => {
+export const createSignal: typeof originalCreateSignal = (data) => {
 	if (import.meta.hot) {
 		const cache: Record<string, Entry> = import.meta.hot.data;
 		try {
@@ -28,21 +28,21 @@ export const ref: typeof _ref = (data) => {
 				const key = JSON.stringify(fns);
 				if (isHMR) {
 					const i = (iterators[key] = (iterators[key] || 0) + 1);
-					const pair = cache[key].refs[i - 1];
+					const pair = cache[key].signals[i - 1];
 					if (!pair || JSON.stringify(pair[0]) !== JSON.stringify(data)) {
 						globalThis.location.reload();
 					}
 					increaseRecoveredRefCount();
 					return pair[1];
 				} else {
-					const out = _ref(data) as Ref<any>;
+					const out = originalCreateSignal(data) as Signal<any>;
 					if (cache[key]) {
-						cache[key].refs.push([data, out]);
+						cache[key].signals.push([data, out]);
 						cache[key].i++;
 					} else {
 						cache[key] = {
 							i: 0,
-							refs: [[data, out]],
+							signals: [[data, out]],
 						};
 					}
 					return out;
@@ -50,5 +50,5 @@ export const ref: typeof _ref = (data) => {
 			}
 		}
 	}
-	return _ref(data);
+	return originalCreateSignal(data);
 };

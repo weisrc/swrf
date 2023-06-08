@@ -1,4 +1,4 @@
-import { Child, Fun } from "./types";
+import { Child } from "./types";
 export declare const lazy: <T extends {
     default: (...args: any[]) => Child;
-}>(fn: () => Promise<T>) => (...args: Parameters<T["default"]>) => Fun<Child>;
+}>(fn: () => Promise<T>) => (...args: Parameters<T["default"]>) => () => Child;

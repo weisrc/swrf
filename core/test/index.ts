@@ -1,31 +1,36 @@
 import {
 	attributes,
-	bind,
-	elements,
-	map,
-	ref,
-	Ref,
+	bindEvent,
+	tags,
+	forEach,
+	createSignal,
+	Signal,
 	str,
 	render,
+	showIf,
 } from "../src/dev";
 import greetings from "./greetings";
 import { Test } from "./test";
 
-const { button, div, br, input, span } = elements;
+const { button, div, br, input, span } = tags;
 const { onclick, style, onmount, onunmount } = attributes;
 
 function counter() {
-	const array = ref<Ref<string>[]>(
+	const array = createSignal<Signal<string>[]>(
 		Array(10)
 			.fill(0)
-			.map((_, i) => ref(i + " data"))
+			.map((_, i) => createSignal(i + " data"))
 	);
-	const text = ref("");
-	const index = ref(0);
+	const text = createSignal("");
+	const index = createSignal(0);
 	const red = style({ color: "red" });
 
 	const add = () => {
-		array().splice(index(), 0, ref(text() || Math.random().toFixed(2)));
+		array().splice(
+			index(),
+			0,
+			createSignal(text() || Math.random().toFixed(2))
+		);
 		array([...array()]);
 	};
 
@@ -40,32 +45,31 @@ function counter() {
 	};
 
 	return div(
-		input({ type: "number" }, bind(str(index))),
-		input(bind(text)),
+		input({ type: "number" }, bindEvent("input", str(index))),
+		input(bindEvent("input", text)),
 		button(onclick(add), "add"),
 		button(onclick(remove), red, "remove"),
 		button(onclick(shuffle), "shuffle"),
 		br(),
-		map(array, (n) =>
-			div(
+		forEach(array, (n) => {
+			return div(
 				"value=",
 				n,
-
-				input(bind(n)),
-				() =>
-					n().startsWith("0")
-						? span(
-								onmount((e) => console.log("mounted", e)),
-								onunmount((e) => console.log("unmounted", e)),
-								"starts with 0"
-						  )
-						: null,
+				input(bindEvent("input", n)),
+				showIf(
+					() => n().startsWith("0"),
+					span(
+						onmount((e) => console.log("mounted", e)),
+						onunmount((e) => console.log("unmounted", e)),
+						"starts with 0"
+					)
+				),
 				button(
 					onclick(() => array(array().filter((x) => x !== n))),
 					"remove"
 				)
-			)
-		),
+			);
+		}),
 		greetings({ name: text }, "wow"),
 		Test()
 	);

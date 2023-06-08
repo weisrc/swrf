@@ -1,2 +1,2 @@
-import { Fun } from "./types";
-export declare const render: (fn: Fun<Node>, node: HTMLElement) => void;
+import { Elem } from "./types";
+export declare const render: (fn: () => Elem, node: HTMLElement) => void;

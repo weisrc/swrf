@@ -1,7 +1,7 @@
 /* @jsx h */
-import { h, Get, get } from "../src";
+import { h, Gettable, get } from "../src";
 
-export default (props: { name: Get<string> }, children: any) => {
+export default (props: { name: Gettable<string> }, children: any) => {
 	return (
 		<h1>
 			kldddlo {() => get(props.name) + "hey"}! {children}

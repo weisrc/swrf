@@ -1,17 +1,17 @@
 /* @jsx h */
-import { bind, h, ref } from "../src/dev";
+import { bindEvent, h, createSignal } from "../src/dev";
 import Greetings from "./greetings";
 
 export const Test = () => {
-	const count = ref(0);
+	const count = createSignal(0);
 	const increment = () => count(count() + 1);
-	const text = ref("Hello");
+	const text = createSignal("Hello");
 	return (
 		<div>
 			<button onclick={increment}>
 				{text} {count}
 			</button>
-			<input {...bind(text)} />
+			<input {...bindEvent("input", text)} />
 			<Greetings name={text}>Hi There!!!!</Greetings>
 		</div>
 	);

@@ -1,7 +1,7 @@
-import { Ref } from "./types";
-import { _fn } from "./fx";
+import { Signal } from "./types";
+import { _fn } from "./createEffect";
 
-export const ref = <T>(data: T): Ref<T> => {
+export const createSignal = <T>(data: T): Signal<T> => {
 	let observers = new Set<() => void>();
 	return (...args) => {
 		if (args.length) {

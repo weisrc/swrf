@@ -1,11 +1,11 @@
-import { Ref } from "./types";
+import { Signal } from "./types";
 
 export const str =
-	(ref: Ref<number>): Ref<string> =>
+	(signal: Signal<number>): Signal<string> =>
 	(...args) =>
-		(args.length ? ref(+args[0]!) : ref()) + "";
+		(args.length ? signal(+args[0]!) : signal()) + "";
 
 export const num =
-	(ref: Ref<string>): Ref<number> =>
+	(signal: Signal<string>): Signal<number> =>
 	(...args) =>
-		+(args.length ? ref(args[0] + "") : ref());
+		+(args.length ? signal(args[0] + "") : signal());
