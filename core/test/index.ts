@@ -11,8 +11,8 @@ import {
 import greetings from "./greetings";
 import { Test } from "./test";
 
-const { button, div, br, input } = elements;
-const { onclick, style, onmount } = attributes;
+const { button, div, br, input, span } = elements;
+const { onclick, style, onmount, onunmount } = attributes;
 
 function counter() {
 	const array = ref<Ref<string>[]>(
@@ -46,19 +46,26 @@ function counter() {
 		button(onclick(remove), red, "remove"),
 		button(onclick(shuffle), "shuffle"),
 		br(),
-		map(array, (n) => {
-			const e = div(
+		map(array, (n) =>
+			div(
 				"value=",
 				n,
-				onmount(console.log),
+
 				input(bind(n)),
+				() =>
+					n().startsWith("0")
+						? span(
+								onmount((e) => console.log("mounted", e)),
+								onunmount((e) => console.log("unmounted", e)),
+								"starts with 0"
+						  )
+						: null,
 				button(
 					onclick(() => array(array().filter((x) => x !== n))),
 					"remove"
 				)
-			);
-			return e;
-		}),
+			)
+		),
 		greetings({ name: text }, "wow"),
 		Test()
 	);

@@ -1,5 +1,13 @@
 import { fx } from "./fx";
-import { ClassList, Tag, Style, Get, Init, UPDATE_MOUNT, Element } from "./types";
+import {
+	ClassList,
+	Tag,
+	Style,
+	Get,
+	Init,
+	UPDATE_MOUNT,
+	Element,
+} from "./types";
 import { get, node } from "./utils";
 
 export function h<T extends Tag>(tag: T, ...inits: Get<Init<T>>[]): Node;
@@ -16,10 +24,10 @@ export function h(tag: string | ((...a: any) => Node), ...inits: any): Node {
 		if (wasConnected !== el.isConnected) {
 			if ((wasConnected = el.isConnected)) {
 				el.onmount?.(el);
-				el.childNodes.forEach((c) => (c as Element)[UPDATE_MOUNT]?.());
 			} else {
 				el.onunmount?.(el);
 			}
+			el.childNodes.forEach((c) => (c as Element)[UPDATE_MOUNT]?.());
 		}
 	};
 
@@ -31,11 +39,10 @@ export function h(tag: string | ((...a: any) => Node), ...inits: any): Node {
 
 			if (got instanceof Node) {
 				el.replaceChild(got, old);
-				el[UPDATE_MOUNT]?.();
-				old = got;
+				(old = got as Element)[UPDATE_MOUNT]?.();
 			} else {
 				el.replaceChild(empty, old);
-				el[UPDATE_MOUNT]?.();
+				(old as Element)[UPDATE_MOUNT]?.();
 				old = empty;
 				for (const key in got) {
 					const value = got[key as keyof typeof got];
