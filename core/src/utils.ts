@@ -9,8 +9,6 @@ export const node = (x: Init<HTMLTag>) =>
 		? null
 		: x;
 
-export const get = <T>(x: Gettable<T>): T => (x instanceof Function ? x() : x);
-
 export const updateMountState = (e: Node) => (e as Elem)[UPDATE_MOUNT]?.();
 
 export const replace = (parent: Node, next: Node, current: Node) => {
@@ -19,3 +17,5 @@ export const replace = (parent: Node, next: Node, current: Node) => {
 	updateMountState(current);
 	return next;
 };
+
+export const get = <T>(x: Gettable<T>): T => (x instanceof Function ? x() : x);

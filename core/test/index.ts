@@ -5,7 +5,7 @@ import {
 	forEach,
 	createSignal,
 	Signal,
-	str,
+	intoString,
 	render,
 	showIf,
 } from "../src/dev";
@@ -45,7 +45,7 @@ function counter() {
 	};
 
 	return div(
-		input({ type: "number" }, bindEvent("input", str(index))),
+		input({ type: "number" }, bindEvent("input", intoString(index))),
 		input(bindEvent("input", text)),
 		button(onclick(add), "add"),
 		button(onclick(remove), red, "remove"),

@@ -53,15 +53,15 @@ function Counter() {
 ## Bundle Sizes
 
 ```
-vite v3.2.3 building for production...
-✓ 12 modules transformed.
-dist/swrf.cjs.js   2.14 KiB / gzip: 1.02 KiB
-dist/swrf.es.js   3.08 KiB / gzip: 1.18 KiB
-dist/swrf.iife.js   2.09 KiB / gzip: 1.03 KiB
-dist/swrf.umd.js   2.26 KiB / gzip: 1.11 KiB
-vite v3.2.3 building for dev...
-✓ 16 modules transformed.
-dist/swrf.dev.es.js   3.50 KiB / gzip: 1.38 KiB
+vite v3.2.7 building for production...
+✓ 14 modules transformed.
+dist/swrf.cjs.js   2.66 KiB / gzip: 1.27 KiB
+dist/swrf.es.js   3.70 KiB / gzip: 1.45 KiB
+dist/swrf.iife.js   2.55 KiB / gzip: 1.28 KiB
+dist/swrf.umd.js   2.72 KiB / gzip: 1.35 KiB
+vite v3.2.7 building for dev...
+✓ 17 modules transformed.
+dist/swrf.dev.es.js   4.09 KiB / gzip: 1.63 KiB
 ```
 
 ## Overview
