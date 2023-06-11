@@ -2,12 +2,12 @@ import {
 	attributes,
 	bindEvent,
 	tags,
-	forEach,
+	For,
 	signal,
 	Signal,
 	intoString,
 	render,
-	showIf,
+	Show,
 } from "../src/dev";
 import greetings from "./greetings";
 import { Test } from "./test";
@@ -26,11 +26,7 @@ function counter() {
 	const red = style({ color: "red" });
 
 	const add = () => {
-		array().splice(
-			index(),
-			0,
-			signal(text() || Math.random().toFixed(2))
-		);
+		array().splice(index(), 0, signal(text() || Math.random().toFixed(2)));
 		array([...array()]);
 	};
 
@@ -51,12 +47,12 @@ function counter() {
 		button(onclick(remove), red, "remove"),
 		button(onclick(shuffle), "shuffle"),
 		br(),
-		forEach(array, (n) => {
+		For(array, (n) => {
 			return div(
 				"value=",
 				n,
 				input(bindEvent("input", n)),
-				showIf(
+				Show(
 					() => n().startsWith("0"),
 					span(
 						onmount((e) => console.log("mounted", e)),
@@ -71,7 +67,7 @@ function counter() {
 			);
 		}),
 		greetings({ name: text }, "wow"),
-		Test()
+		Test(),
 	);
 }
 

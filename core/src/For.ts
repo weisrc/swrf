@@ -1,27 +1,27 @@
-import { createEffect } from "./createEffect";
+import { effect } from "./effect";
 import { signal } from "./signal";
-import { Get, Signal, Elem } from "./types";
+import { Get, Signal, Elem, Props } from "./types";
 import { get, updateMountState } from "./utils";
 
-export const forEach = <T>(
-	data: Get<T[]>,
-	fn: (x: T, i: () => number) => Elem
+export const For = <T>(
+	props: Props<{ each: T[] }> | Get<T[]>,
+	fn: (item: T, i: () => number) => Elem
 ): DocumentFragment => {
 	let nodes: Elem[] = [];
 	let cache = new Map<T, Elem>();
 	const indices = new WeakMap<Node, Signal<number>>();
 	const head = document.createTextNode("");
-	const frag = document.createDocumentFragment();
-	frag.appendChild(head);
-	createEffect(() => {
+	const fragment = document.createDocumentFragment();
+	fragment.appendChild(head);
+	effect(() => {
 		const nextNodes: Elem[] = [];
 		const nextCache = new Map<T, Elem>();
 
-		const got = get(data);
+		const items = get((props as Props<{ each: T[] }>).each ?? props);
 		let current = head.nextSibling! as Elem;
 
-		for (let i = 0; i < got.length; i++) {
-			const item = got[i];
+		for (let i = 0; i < items.length; i++) {
+			const item = items[i];
 			let node: Elem = null!;
 			const index = signal(i);
 			node = (!nextCache.has(item) && cache.get(item)) || fn(item, index);
@@ -44,5 +44,5 @@ export const forEach = <T>(
 		cache = nextCache;
 		nodes = nextNodes;
 	});
-	return frag;
+	return fragment;
 };

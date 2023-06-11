@@ -1,3 +1,3 @@
 import { Signal } from "./types";
-export declare const str: (signal: Signal<number>) => Signal<string>;
-export declare const num: (signal: Signal<string>) => Signal<number>;
+export declare const intoString: (signal: Signal<number>) => Signal<string>;
+export declare const intoNumber: (signal: Signal<string>) => Signal<number>;

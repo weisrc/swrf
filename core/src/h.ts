@@ -1,4 +1,4 @@
-import { createEffect } from "./createEffect";
+import { effect } from "./effect";
 import {
 	ClassList,
 	HTMLTag,
@@ -36,7 +36,7 @@ export function h(tag: string | ((...a: any) => Node), ...inits: any): Node {
 		el.append("")
 		const empty: Node = el.lastChild!
 		let current = empty
-		createEffect(() => {
+		effect(() => {
 			const got = node(get(init));
 			const isNode = got instanceof Node;
 			current = replace(el, isNode ? got : empty, current);
@@ -47,7 +47,7 @@ export function h(tag: string | ((...a: any) => Node), ...inits: any): Node {
 					const style = get(value) as Style;
 					if (typeof style === "object") {
 						for (const p in style) {
-							createEffect(() => (el.style[p] = get(style[p])!));
+							effect(() => (el.style[p] = get(style[p])!));
 						}
 						continue;
 					}
@@ -55,7 +55,7 @@ export function h(tag: string | ((...a: any) => Node), ...inits: any): Node {
 				if (key === "classList") {
 					const list = get(value) as ClassList;
 					for (const name in list) {
-						createEffect(() =>
+						effect(() =>
 							get(list[name])
 								? el.classList.add(name)
 								: el.classList.remove(name)
@@ -63,7 +63,7 @@ export function h(tag: string | ((...a: any) => Node), ...inits: any): Node {
 					}
 					continue;
 				}
-				createEffect(
+				effect(
 					() =>
 						(el[key as "id"] =
 							!key.startsWith("on") && value instanceof Function

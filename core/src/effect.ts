@@ -1,6 +1,6 @@
 export let _fn = () => {};
 
-export const createEffect = (fn: () => void) => {
+export const effect = (fn: () => void) => {
 	const run = () => {
 		const old = _fn;
 		_fn = run;
