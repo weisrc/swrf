@@ -3,7 +3,7 @@ import {
 	bindEvent,
 	tags,
 	forEach,
-	createSignal,
+	signal,
 	Signal,
 	intoString,
 	render,
@@ -16,20 +16,20 @@ const { button, div, br, input, span } = tags;
 const { onclick, style, onmount, onunmount } = attributes;
 
 function counter() {
-	const array = createSignal<Signal<string>[]>(
+	const array = signal<Signal<string>[]>(
 		Array(10)
 			.fill(0)
-			.map((_, i) => createSignal(i + " data"))
+			.map((_, i) => signal(i + " data"))
 	);
-	const text = createSignal("");
-	const index = createSignal(0);
+	const text = signal("");
+	const index = signal(0);
 	const red = style({ color: "red" });
 
 	const add = () => {
 		array().splice(
 			index(),
 			0,
-			createSignal(text() || Math.random().toFixed(2))
+			signal(text() || Math.random().toFixed(2))
 		);
 		array([...array()]);
 	};

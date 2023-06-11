@@ -1,11 +1,11 @@
 /* @jsx h */
-import { bindEvent, h, createSignal } from "../src/dev";
+import { bindEvent, h, signal } from "../src/dev";
 import Greetings from "./greetings";
 
 export const Test = () => {
-	const count = createSignal(0);
+	const count = signal(0);
 	const increment = () => count(count() + 1);
-	const text = createSignal("Hello");
+	const text = signal("Hello");
 	return (
 		<div>
 			<button onclick={increment}>

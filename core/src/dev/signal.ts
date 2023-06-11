@@ -1,4 +1,4 @@
-import { createSignal as originalCreateSignal } from "../createSignal";
+import { signal as oldSignal } from "../signal";
 import { Signal } from "../types";
 import { increaseRecoveredRefCount, isHMR, iterators } from "./render";
 
@@ -9,7 +9,7 @@ type Entry = {
 	signals: [any, Signal<any>][];
 };
 
-export const createSignal: typeof originalCreateSignal = (data) => {
+export const signal: typeof oldSignal = (data) => {
 	if (import.meta.hot) {
 		const cache: Record<string, Entry> = import.meta.hot.data;
 		try {
@@ -35,7 +35,7 @@ export const createSignal: typeof originalCreateSignal = (data) => {
 					increaseRecoveredRefCount();
 					return pair[1];
 				} else {
-					const out = originalCreateSignal(data) as Signal<any>;
+					const out = oldSignal(data) as Signal<any>;
 					if (cache[key]) {
 						cache[key].signals.push([data, out]);
 						cache[key].i++;
@@ -50,5 +50,5 @@ export const createSignal: typeof originalCreateSignal = (data) => {
 			}
 		}
 	}
-	return originalCreateSignal(data);
+	return oldSignal(data);
 };

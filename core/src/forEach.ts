@@ -1,10 +1,10 @@
 import { createEffect } from "./createEffect";
-import { createSignal } from "./createSignal";
-import { Gettable, Signal, Elem } from "./types";
+import { signal } from "./signal";
+import { Get, Signal, Elem } from "./types";
 import { get, updateMountState } from "./utils";
 
 export const forEach = <T>(
-	data: Gettable<T[]>,
+	data: Get<T[]>,
 	fn: (x: T, i: () => number) => Elem
 ): DocumentFragment => {
 	let nodes: Elem[] = [];
@@ -23,7 +23,7 @@ export const forEach = <T>(
 		for (let i = 0; i < got.length; i++) {
 			const item = got[i];
 			let node: Elem = null!;
-			const index = createSignal(i);
+			const index = signal(i);
 			node = (!nextCache.has(item) && cache.get(item)) || fn(item, index);
 			indices.get(node)?.(i) ?? indices.set(node, index);
 			node === current

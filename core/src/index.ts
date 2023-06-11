@@ -5,7 +5,7 @@ export * from "./createEffect";
 export * from "./h";
 export * from "./lazy";
 export * from "./forEach";
-export * from "./createSignal";
+export * from "./signal";
 export * from "./render";
 export * from "./tags";
 export * from "./types";

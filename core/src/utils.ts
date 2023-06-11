@@ -1,4 +1,4 @@
-import { Gettable, Init, HTMLTag, UPDATE_MOUNT, Elem } from "./types";
+import { Get, Init, HTMLTag, UPDATE_MOUNT, Elem } from "./types";
 
 export const node = (x: Init<HTMLTag>) =>
 	x instanceof Node
@@ -18,4 +18,4 @@ export const replace = (parent: Node, next: Node, current: Node) => {
 	return next;
 };
 
-export const get = <T>(x: Gettable<T>): T => (x instanceof Function ? x() : x);
+export const get = <T>(x: Get<T>): T => (x instanceof Function ? x() : x);

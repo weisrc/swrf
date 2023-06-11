@@ -1,4 +1,4 @@
-import { createSignal } from "./createSignal";
+import { signal } from "./signal";
 import { Child } from "./types";
 
 export const lazy = <T extends { default: (...args: any[]) => Child }>(
@@ -6,7 +6,7 @@ export const lazy = <T extends { default: (...args: any[]) => Child }>(
 ): ((...args: Parameters<T["default"]>) => () => Child) => {
 	let cache: T["default"] | undefined;
 	return (...args) => {
-		const out = createSignal<Child>(null);
+		const out = signal<Child>(null);
 		cache
 			? out(cache(...(args as unknown[])))
 			: fn().then((res) => out((cache = res.default)(...(args as unknown[]))));

@@ -3,14 +3,14 @@ import {
 	ClassList,
 	HTMLTag,
 	Style,
-	Gettable,
+	Get,
 	Init,
 	UPDATE_MOUNT,
 	Elem,
 } from "./types";
 import { get, node, replace } from "./utils";
 
-export function h<T extends HTMLTag>(tag: T, ...inits: Gettable<Init<T>>[]): Node;
+export function h<T extends HTMLTag>(tag: T, ...inits: Get<Init<T>>[]): Node;
 export function h<T extends (...a: any) => Node>(
 	tag: T,
 	...params: Parameters<T>
