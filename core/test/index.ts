@@ -66,7 +66,7 @@ function counter() {
 				)
 			);
 		}),
-		greetings({ name: text }, "wow"),
+		greetings({ name: text }),
 		Test(),
 	);
 }

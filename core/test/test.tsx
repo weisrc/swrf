@@ -1,6 +1,7 @@
 /* @jsx h */
-import { bindEvent, h, signal } from "../src/dev";
-import Greetings from "./greetings";
+import { bindEvent, h, lazy, signal } from "../src/dev";
+
+const Greetings = lazy(() => import("./greetings"));
 
 export const Test = () => {
 	const count = signal(0);
