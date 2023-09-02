@@ -1,12 +1,12 @@
 /* @jsx h */
-import { bindEvent, h, lazy, signal } from "../src/dev";
+import { bindEvent, h, lazy, useSignal } from "../src/dev";
 
 const Greetings = lazy(() => import("./greetings"));
 
 export const Test = () => {
-	const count = signal(0);
+	const count = useSignal(0);
 	const increment = () => count(count() + 1);
-	const text = signal("Hello");
+	const text = useSignal("Hello");
 	return (
 		<div>
 			<button onclick={increment}>

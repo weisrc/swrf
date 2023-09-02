@@ -1,7 +1,7 @@
-import { Signal } from "./types";
-import { _fn } from "./effect";
+import { WritableSignal } from "./types";
+import { handler } from "./useEffect";
 
-export const signal = <T>(data: T): Signal<T> => {
+export const useSignal = <T>(data: T): WritableSignal<T> => {
 	let observers = new Set<() => void>();
 	return (...args) => {
 		if (args.length) {
@@ -12,8 +12,8 @@ export const signal = <T>(data: T): Signal<T> => {
 				observers = new Set();
 				for (const o of previous) o();
 			}
-		} else if (_fn) {
-			observers.add(_fn);
+		} else if (handler) {
+			observers.add(handler);
 		}
 		return data;
 	};

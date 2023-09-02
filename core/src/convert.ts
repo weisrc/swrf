@@ -1,11 +1,11 @@
-import { Signal } from "./types";
+import { WritableSignal } from "./types";
 
-export const intoString =
-	(signal: Signal<number>): Signal<string> =>
+export const toString =
+	(signal: WritableSignal<number>): WritableSignal<string> =>
 	(...args) =>
 		(args.length ? signal(+args[0]!) : signal()) + "";
 
-export const intoNumber =
-	(signal: Signal<string>): Signal<number> =>
+export const toNumber =
+	(signal: WritableSignal<string>): WritableSignal<number> =>
 	(...args) =>
 		+(args.length ? signal(args[0] + "") : signal());

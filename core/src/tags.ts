@@ -1,9 +1,9 @@
 import { h } from "./h";
-import { Tags, Init, HTMLTag, Get } from "./types";
+import { HTMLTag, Params, Tags } from "./types";
 
 export const tags = new Proxy({} as Tags, {
-	get:
-		(_, tag: HTMLTag) =>
-		(...inits: Get<Init<HTMLTag>>[]) =>
-			h(tag, ...inits),
+  get:
+    <T extends HTMLTag>(_: unknown, tag: T) =>
+    (...params: Params<T>) =>
+      h(tag, ...params),
 });

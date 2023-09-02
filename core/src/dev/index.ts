@@ -1,3 +1,3 @@
 export * from "../index";
-export { signal as useSignal } from "./signal";
+export { useSignal } from "./useSignal";
 export { render } from "./render";

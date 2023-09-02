@@ -1,6 +1,6 @@
-# S.W.R.F.
+# 🌊 Swrf 🏖️
 
-## 🌊 Speedy Web Reactive Framework 🏖️
+*Speedy Web Reactive Functions*
 
 - Pronouced as **surf**, /sərf/
 - Truly **reactive**
@@ -27,8 +27,8 @@ npm i @swrf/core
 ```
 
 ```ts
-import { elements, attributes } from "@swrf/core";
-const { button } = elements;
+import { tags, attributes } from "@swrf/core";
+const { button } = tags;
 const { onclick } = attributes;
 function counter() {
 	const count = ref(0);

@@ -14,7 +14,7 @@
 		"noUnusedParameters": true,
 		"noImplicitReturns": true,
 		"module": "ESNext",
-		"outDir": "types",
+		"outDir": "dist/types",
 		"emitDeclarationOnly": true,
 		"jsx": "react"
 	},

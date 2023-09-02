@@ -11,7 +11,7 @@ export default (props: Props<{ name: string }>) => {
 						<For each={[1, 2, 3]}>
 							{(i) => {
 								return (
-									<span>
+									<span class="special">
 										<Show when={true}>
 											<Show when={true}>
 												<span>Hello {props.name}</span>

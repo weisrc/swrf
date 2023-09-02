@@ -1,15 +1,15 @@
-import { signal } from "./signal";
-import { Child } from "./types";
+import { useSignal } from "./useSignal";
+import { Child, Component } from "./types";
 
-export const lazy = <T extends { default: (...args: any[]) => Child }>(
-	fn: () => Promise<T>
+export const lazy = <T extends { default: Component }>(
+  fn: () => Promise<T>
 ): ((...args: Parameters<T["default"]>) => () => Child) => {
-	let cache: T["default"] | undefined;
-	return (...args) => {
-		const out = signal<Child>(null);
-		cache
-			? out(cache(...(args as unknown[])))
-			: fn().then((res) => out((cache = res.default)(...(args as unknown[]))));
-		return out;
-	};
+  let cache: T["default"] | undefined;
+  return (...args) => {
+    const signal = useSignal<Child>(null);
+    cache
+      ? signal(cache(...(args as unknown[])))
+      : fn().then((res) => signal((cache = res.default)(...(args as unknown[]))));
+    return signal;
+  };
 };

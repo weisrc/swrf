@@ -1,48 +1,48 @@
-import { effect } from "./effect";
-import { signal } from "./signal";
-import { Get, Signal, Elem, Props } from "./types";
-import { get, updateMountState } from "./utils";
+import { useEffect } from "./useEffect";
+import { useSignal } from "./useSignal";
+import { Readable, WritableSignal, Element, Props } from "./types";
+import { read, updateMount } from "./utils";
 
 export const For = <T>(
-	props: Props<{ each: T[] }> | Get<T[]>,
-	fn: (item: T, i: () => number) => Elem
+  props: Props<{ each: T[] }> | Readable<T[]>,
+  fn: (item: T, i: () => number) => Element
 ): DocumentFragment => {
-	let nodes: Elem[] = [];
-	let cache = new Map<T, Elem>();
-	const indices = new WeakMap<Node, Signal<number>>();
-	const head = document.createTextNode("");
-	const fragment = document.createDocumentFragment();
-	fragment.appendChild(head);
-	effect(() => {
-		const nextNodes: Elem[] = [];
-		const nextCache = new Map<T, Elem>();
+  let nodes: Element[] = [];
+  let cache = new Map<T, Element>();
+  const indices = new WeakMap<Node, WritableSignal<number>>();
+  const head = document.createTextNode("");
+  const fragment = document.createDocumentFragment();
+  fragment.appendChild(head);
+  useEffect(() => {
+    const nextNodes: Element[] = [];
+    const nextCache = new Map<T, Element>();
 
-		const items = get((props as Props<{ each: T[] }>).each ?? props);
-		let current = head.nextSibling! as Elem;
+    const items = read((<Props<{ each: T[] }>>props).each ?? props);
+    let current = head.nextSibling! as Element;
 
-		for (let i = 0; i < items.length; i++) {
-			const item = items[i];
-			let node: Elem = null!;
-			const index = signal(i);
-			node = (!nextCache.has(item) && cache.get(item)) || fn(item, index);
-			indices.get(node)?.(i) ?? indices.set(node, index);
-			node === current
-				? (current = current.nextSibling! as Elem)
-				: node === current?.nextSibling
-				? (current = current.nextSibling?.nextSibling! as Elem)
-				: head.parentNode!.insertBefore(node, current);
-			nextCache.set(item, node);
-			nextNodes.push(node);
-			updateMountState(node);
-		}
-		for (const node of nodes) {
-			if (nextNodes.indexOf(node) < 0) {
-				head.parentNode!.removeChild(node);
-				updateMountState(node);
-			}
-		}
-		cache = nextCache;
-		nodes = nextNodes;
-	});
-	return fragment;
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      let node: Element = null!;
+      const index = useSignal(i);
+      node = (!nextCache.has(item) && cache.get(item)) || fn(item, index);
+      indices.get(node)?.(i) ?? indices.set(node, index);
+      node === current
+        ? (current = current.nextSibling! as Element)
+        : node === current?.nextSibling
+        ? (current = current.nextSibling?.nextSibling! as Element)
+        : head.parentNode!.insertBefore(node, current);
+      nextCache.set(item, node);
+      nextNodes.push(node);
+      updateMount(node);
+    }
+    for (const node of nodes) {
+      if (nextNodes.indexOf(node) < 0) {
+        head.parentNode!.removeChild(node);
+        updateMount(node);
+      }
+    }
+    cache = nextCache;
+    nodes = nextNodes;
+  });
+  return fragment;
 };

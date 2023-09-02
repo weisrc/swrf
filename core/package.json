@@ -1,7 +1,7 @@
 {
 	"name": "@swrf/core",
 	"version": "0.0.1",
-	"types": "./types/index.d.ts",
+	"types": "./dist/types/index.d.ts",
 	"exports": {
 		"development": {
 			"import": "./dist/swrf.dev.es.js"
@@ -11,7 +11,7 @@
 	},
 	"scripts": {
 		"dev": "vite",
-		"build": "tsc && vite build && vite build --mode dev",
+		"build": "tsc && vite build && vite build --mode dev && vite build --mode slim",
 		"preview": "vite preview"
 	},
 	"devDependencies": {
