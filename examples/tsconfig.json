@@ -16,9 +16,8 @@
 		"module": "ESNext",
 		"outDir": "dist/types",
 		"emitDeclarationOnly": true,
-		"jsx": "react"
 	},
-	"include": ["./src", "jsx.d.ts"],
+	"include": ["./*.ts", "@swrf/core"],
 	"ts-node": {
 		"transpileOnly": true
 	}

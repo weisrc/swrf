@@ -57,3 +57,9 @@ export type Params<T extends HTMLTag | Component> = T extends HTMLTag
 export type Props<T extends Record<string, unknown>> = {
   [key in keyof T]: Readable<T[key]>;
 };
+
+export declare namespace JSX {
+  interface IntrinsicElements {
+    foo: number;
+  }
+}
