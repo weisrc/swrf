@@ -2,8 +2,7 @@
 	"name": "swrf",
 	"workspaces": [
 		"core",
-		"ssr",
-		"labs"
+		"ssr"
 	],
 	"dependencies": {
 		"ts-node": "^10.9.1",
