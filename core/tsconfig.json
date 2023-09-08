@@ -1,25 +1,25 @@
 {
-	"compilerOptions": {
-		"target": "ESNext",
-		"useDefineForClassFields": true,
-		"lib": ["DOM", "ESNext"],
-		"moduleResolution": "Node",
-		"declaration": true,
-		"strict": true,
-		"sourceMap": true,
-		"resolveJsonModule": true,
-		"esModuleInterop": true,
-		"noImplicitAny": true,
-		"noUnusedLocals": true,
-		"noUnusedParameters": true,
-		"noImplicitReturns": true,
-		"module": "ESNext",
-		"outDir": "dist/types",
-		"emitDeclarationOnly": true,
-		"jsx": "react"
-	},
-	"include": ["./src", "jsx.d.ts"],
-	"ts-node": {
-		"transpileOnly": true
-	}
+  "compilerOptions": {
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "lib": ["DOM", "ESNext"],
+    "moduleResolution": "Node",
+    "declaration": true,
+    "strict": true,
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "module": "ESNext",
+    "outDir": "dist/types",
+    "emitDeclarationOnly": true,
+    "jsx": "react"
+  },
+  "include": ["./src", "jsx.d.ts"],
+  "ts-node": {
+    "transpileOnly": true
+  }
 }

@@ -1,21 +1,21 @@
 {
-	"name": "@swrf/core",
-	"version": "0.0.1",
-	"types": "./dist/types/index.d.ts",
-	"exports": {
-		"development": {
-			"import": "./dist/swrf.dev.es.js"
-		},
-		"import": "./dist/swrf.es.js",
-		"require": "./dist/swrf.cjs.js"
-	},
-	"scripts": {
-		"dev": "vite",
-		"build": "tsc && vite build && vite build --mode dev && vite build --mode slim",
-		"preview": "vite preview"
-	},
-	"devDependencies": {
-		"typescript": "^4.6.4",
-		"vite": "^3.2.3"
-	}
+  "name": "@swrf/core",
+  "version": "0.0.1",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    "development": {
+      "import": "./dist/swrf.dev.es.js"
+    },
+    "import": "./dist/swrf.es.js",
+    "require": "./dist/swrf.cjs.js"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build && vite build --mode dev && vite build --mode slim",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "typescript": "^4.6.4",
+    "vite": "^3.2.3"
+  }
 }

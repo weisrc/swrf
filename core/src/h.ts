@@ -7,7 +7,7 @@ import {
   UPDATE_MOUNT,
   Element,
   Component,
-  AttributeMap,
+  AttributeMap
 } from "./types";
 import { read, toNode, replace } from "./utils";
 
@@ -62,13 +62,12 @@ export function h<T extends HTMLTag | Component>(
           }
           continue;
         }
-        useEffect(
-          () =>
-            (el[key as "id"] =
-              !key.startsWith("on") && value instanceof Function
-                ? value()
-                : value)
-        );
+        useEffect(() => {
+          el[key as "id"] =
+            !key.startsWith("on") && value instanceof Function
+              ? value()
+              : value;
+        });
       }
     });
   }

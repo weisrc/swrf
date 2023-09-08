@@ -9,7 +9,9 @@ export const lazy = <T extends { default: Component }>(
     const signal = useSignal<Child>(null);
     cache
       ? signal(cache(...(args as unknown[])))
-      : fn().then((res) => signal((cache = res.default)(...(args as unknown[]))));
+      : fn().then((res) =>
+          signal((cache = res.default)(...(args as unknown[])))
+        );
     return signal;
   };
 };

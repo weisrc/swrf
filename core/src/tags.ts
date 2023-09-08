@@ -5,5 +5,5 @@ export const tags = new Proxy({} as Tags, {
   get:
     <T extends HTMLTag>(_: unknown, tag: T) =>
     (...params: Params<T>) =>
-      h(tag, ...params),
+      h(tag, ...params)
 });

@@ -1,9 +1,10 @@
 import * as dom from "linkedom";
-import { Document } from "./Document";
+// @ts-expect-error this is a hack
+import { HTMLDocument } from "../node_modules/linkedom/cjs/html/document.js";
 
 Object.assign(globalThis, dom);
 
-export function render(fn: () => HTMLElement) {
-	globalThis.document = new Document();
-	return fn();
+export async function render(component: () => HTMLElement) {
+  globalThis.document = new HTMLDocument();
+  return component();
 }

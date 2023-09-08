@@ -18,7 +18,7 @@
 // export type RouteMap = Record<string, Route>;
 
 // export type RouteSignal<T extends Route> = Signal<{
-  
+
 // }>
 
 // export type RouteSignalMap<T extends RouteMap> = {

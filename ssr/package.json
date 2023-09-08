@@ -1,9 +1,12 @@
 {
-	"name": "@swrf/ssr",
-	"scripts": {
-		"test": "ts-node ./test"
-	},
-	"dependencies": {
-		"linkedom": "^0.14.19"
-	}
+  "name": "@swrf/ssr",
+  "scripts": {
+    "test": "ts-node ./test"
+  },
+  "devDependencies": {
+    "@swrf/core": "workspace:*"
+  },
+  "dependencies": {
+    "linkedom": "^0.14.19"
+  }
 }
