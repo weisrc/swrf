@@ -1,18 +1,30 @@
 {
   "name": "@swrf/core",
   "version": "0.0.1",
-  "types": "./dist/types/index.d.ts",
+  "types": "./dist/types/browser/index.d.ts",
   "exports": {
-    "development": {
-      "import": "./dist/swrf.dev.es.js"
+    "browser": {
+      "import": "./dist/browser.es.js",
+      "require": "./dist/browser.cjs.js",
+      "default": "./dist/browser.es.js"
     },
-    "import": "./dist/swrf.es.js",
-    "require": "./dist/swrf.cjs.js"
+    "development": {
+      "import": "./dist/browser.es.js",
+      "require": "./dist/browser.cjs.js",
+      "default": "./dist/browser.es.js"
+    },
+    "node": {
+      "import": "./dist/node.es.js",
+      "require": "./dist/node.cjs.js",
+      "default": "./dist/node.es.js"
+    }
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build && vite build --mode dev && vite build --mode slim",
-    "preview": "vite preview"
+    "build:types": "tsc",
+    "build:browser": "vite build --mode browser",
+    "build:browser-dev": "vite build --mode browser-dev",
+    "build:browser-slim": "vite build --mode browser-slim"
   },
   "devDependencies": {
     "typescript": "^4.6.4",

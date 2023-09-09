@@ -1,4 +1,4 @@
-import { render as _render } from "../render";
+import { render as _render } from "..";
 
 export const DEV = {
   SWRF_RENDER: () => {

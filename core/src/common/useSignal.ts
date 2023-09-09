@@ -1,4 +1,4 @@
-import { WritableSignal } from "./types";
+import type { WritableSignal } from "../types";
 import { handler } from "./useEffect";
 
 export const useSignal = <T>(data: T): WritableSignal<T> => {

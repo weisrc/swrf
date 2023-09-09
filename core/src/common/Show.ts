@@ -1,5 +1,5 @@
-import { Child, Readable, Props } from "./types";
-import { read } from "./utils";
+import type { Child, Readable, Props } from "../types";
+import { read } from "./read";
 
 export const Show =
   (

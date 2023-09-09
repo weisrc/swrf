@@ -1,17 +1,17 @@
-import { useSignal as oldUseSignal } from "../useSignal";
-import { WritableSignal } from "../types";
+import { useSignal as oldUseSignal } from "..";
+import type { WritableSignal } from "../../types";
 import { increaseRecoveredRefCount, isHMR, iterators } from "./render";
 
 const re = /([^(]+)@|at ([^(]+) \(/g;
 
-type Entry = {
+type Entry<T> = {
   i: number;
-  signals: [any, WritableSignal<any>][];
+  signals: [T, WritableSignal<T>][];
 };
 
 export const useSignal: typeof oldUseSignal = (data) => {
   if (import.meta.hot) {
-    const cache: Record<string, Entry> = import.meta.hot.data;
+    const cache: Record<string, Entry<typeof data>> = import.meta.hot.data;
     try {
       throw new Error();
     } catch (e) {
@@ -35,7 +35,7 @@ export const useSignal: typeof oldUseSignal = (data) => {
           increaseRecoveredRefCount();
           return pair[1];
         } else {
-          const out = oldUseSignal(data) as WritableSignal<any>;
+          const out = oldUseSignal(data);
           if (cache[key]) {
             cache[key].signals.push([data, out]);
             cache[key].i++;

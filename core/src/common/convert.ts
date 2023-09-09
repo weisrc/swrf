@@ -1,4 +1,4 @@
-import { WritableSignal } from "./types";
+import type { WritableSignal } from "../types";
 
 export const toString =
   (signal: WritableSignal<number>): WritableSignal<string> =>
