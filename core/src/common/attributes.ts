@@ -1,5 +1,5 @@
-import type { AttributesFunction, Element } from "../types";
+import type { AttributesFab } from "../types";
 
-export const attributes = new Proxy({} as AttributesFunction<Element>, {
+export const attributes = new Proxy({} as AttributesFab, {
   get: (_, key) => (value: unknown) => ({ [key]: value })
 });

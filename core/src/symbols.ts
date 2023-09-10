@@ -1,1 +1,0 @@
-export const WAS_CONNECTED = Symbol();

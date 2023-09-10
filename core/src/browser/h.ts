@@ -1,41 +1,41 @@
 import {
   ClassList,
   Component,
-  Element,
+  ElementMap,
   ElementTag,
-  HParams,
-  Lazy,
+  Param,
+  Far,
   Style
 } from "../types";
 
-import { read, useEffect } from "../common";
-import { replace, tryNode } from "./nodeUtils";
+import { read, effect } from "../common";
+import { replace, tryNode } from "./utils";
 
 export function h<T extends ElementTag>(
   tag: T,
-  ...params: HParams<T>
-): Lazy<Element<T>>;
+  ...params: Param<ElementMap[T]>[]
+): Far<ElementMap[T]>;
 
 export function h<T extends Component>(
   tag: T,
   ...params: Parameters<T>
-): Lazy<ReturnType<T>>;
+): Far<ReturnType<T>>;
 
 export function h(tag: any, ...params: any): any {
   if (typeof tag === "function") {
     return tag(...params);
   }
   return (() => {
-    const el = document.createElement(tag);
+    const element = document.createElement(tag);
 
     for (const param of params) {
-      el.append("");
-      const empty = el.lastChild!;
+      element.append("");
+      const empty = element.lastChild!;
       let current = empty;
-      useEffect(() => {
-        const out = tryNode(read(param));
+      effect(() => {
+        const out = tryNode(read(read(param)));
         const isNode = out instanceof Node;
-        current = replace(el, isNode ? out : empty, current);
+        current = replace(element, isNode ? out : empty, current);
         if (isNode) return;
         for (const key in out) {
           const value = out[key];
@@ -43,31 +43,33 @@ export function h(tag: any, ...params: any): any {
             const style = read(value) as Style;
             if (typeof style === "object") {
               for (const p in style) {
-                useEffect(() => (el.style[p] = read(style[p])));
+                effect(() => (element.style[p] = read(style[p])));
               }
             }
           } else if (key === "classList") {
             const list = read(value) as ClassList;
             for (const name in list) {
-              useEffect(() =>
+              effect(() =>
                 read(list[name])
-                  ? el.classList.add(name)
-                  : el.classList.remove(name)
+                  ? element.classList.add(name)
+                  : element.classList.remove(name)
               );
             }
           } else if (key.startsWith("on")) {
-            el.addEventListener(
+            element.addEventListener(
               key.slice(2),
               value as EventListenerOrEventListenerObject
             );
+          } else if (key === "ref") {
+            value(element);
           } else {
-            useEffect(() => {
-              el[key] = read(value);
+            effect(() => {
+              element[key] = read(value);
             });
           }
         }
       });
     }
-    return el;
+    return element;
   }) as any;
 }

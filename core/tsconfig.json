@@ -16,8 +16,8 @@
     "module": "ESNext",
     "outDir": "dist/types",
     "emitDeclarationOnly": true,
+    "removeComments": false,
     "jsx": "react",
-    "baseUrl": "src"
   },
   "include": ["./src", "jsx.d.ts"],
   "ts-node": {

@@ -12,12 +12,12 @@ export type ClassList = {
   [key in string]?: Readable<boolean>;
 };
 
-export type Element<T extends ElementTag = ElementTag> = ElementMap[T];
+export type Element = ElementMap[ElementTag];
 
 type ExtraAttributes<E extends Element> = {
   onmount?: (e: Event) => void;
   onunmount?: (e: Event) => void;
-  ref?: WritableSignal<E>;
+  ref?: WritableSignal<E | undefined>;
 };
 
 export type Attributes<T extends Element = Element> = {

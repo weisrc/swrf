@@ -1,2 +1,2 @@
 export * from "../types";
-export { attributes, h, render, tags, useEffect, useSignal, read } from ".";
+export { attributes, h, render, tags, effect as useEffect, signal as useSignal, read } from ".";

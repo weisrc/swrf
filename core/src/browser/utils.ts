@@ -1,4 +1,4 @@
-import { WAS_CONNECTED } from "../symbols";
+import { WAS_CONNECTED } from "../constants";
 import { Element } from "../types";
 
 export const tryNode = <T>(x: T) =>
