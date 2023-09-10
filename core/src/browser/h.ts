@@ -1,25 +1,25 @@
 import {
   ClassList,
   Component,
-  ElementMap,
-  ElementTag,
+  CommonNamespace,
+  CommonTag,
   Param,
-  Far,
+  Lazy,
   Style
 } from "../types";
 
 import { read, effect } from "../common";
 import { replace, tryNode } from "./utils";
 
-export function h<T extends ElementTag>(
+export function h<T extends CommonTag>(
   tag: T,
-  ...params: Param<ElementMap[T]>[]
-): Far<ElementMap[T]>;
+  ...params: Param<CommonNamespace[T]>[]
+): Lazy<CommonNamespace[T]>;
 
 export function h<T extends Component>(
   tag: T,
   ...params: Parameters<T>
-): Far<ReturnType<T>>;
+): Lazy<ReturnType<T>>;
 
 export function h(tag: any, ...params: any): any {
   if (typeof tag === "function") {
@@ -35,7 +35,7 @@ export function h(tag: any, ...params: any): any {
       effect(() => {
         const out = tryNode(read(read(param)));
         const isNode = out instanceof Node;
-        current = replace(element, isNode ? out : empty, current);
+        current = replace(current, isNode ? out : empty);
         if (isNode) return;
         for (const key in out) {
           const value = out[key];

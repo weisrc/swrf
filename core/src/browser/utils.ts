@@ -1,5 +1,5 @@
 import { WAS_CONNECTED } from "../constants";
-import { Element } from "../types";
+import { BaseElement } from "../types";
 
 export const tryNode = <T>(x: T) =>
   x instanceof Node
@@ -10,18 +10,18 @@ export const tryNode = <T>(x: T) =>
     ? null
     : x;
 
-export function updateMount(el: Element) {
-  const isConnected = el.isConnected;
-  if ((el as any)[WAS_CONNECTED] !== isConnected) {
+export function updateMount(el: BaseElement, willConnect?: boolean) {
+  const isConnected = willConnect ?? el.isConnected;
+  if (!(el as any)[WAS_CONNECTED] == isConnected) {
     el.dispatchEvent(new Event(isConnected ? "mount" : "unmount"));
-    el.childNodes.forEach((c) => updateMount(c as Element));
+    el.childNodes.forEach((c) => updateMount(c as BaseElement, willConnect));
     (el as any)[WAS_CONNECTED] = isConnected;
   }
 }
 
-export function replace(parent: Element, next: Element, current: Element) {
-  parent.replaceChild(next, current);
-  updateMount(next);
+export function replace(current: BaseElement, next: BaseElement) {
+  updateMount(next, current.isConnected);
+  current.replaceWith(next);
   updateMount(current);
   return next;
 }

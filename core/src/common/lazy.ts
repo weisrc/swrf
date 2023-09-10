@@ -1,12 +1,12 @@
-import { Component, Element, Far } from "../types";
+import { Component, BaseElement, Lazy } from "../types";
 import { signal } from "./signal";
 
 export const lazy = <T extends { default: Component }>(
   fn: () => Promise<T>
-): ((...args: Parameters<T["default"]>) => Far<Element>) => {
+): ((...args: Parameters<T["default"]>) => Lazy<BaseElement>) => {
   let cache: T["default"] | undefined;
   return (...args) => {
-    const element = signal<Element>();
+    const element = signal<BaseElement>();
     const set = () => element(cache!(...(args as unknown[]))());
     if (cache) {
       set();

@@ -10,12 +10,12 @@ import {
   arraySignal
 } from "@swrf/core";
 
-const { div, button, h1, input, template } = tags;
-const { onclick, onmount, ref } = attributes;
+const { div, button, h1, input, math, mi, mn, mo, mrow, msup } = tags;
+const { onclick, onmount, ref, onunmount } = attributes;
 
 const App = () => {
   const showList = signal(false);
-  const array = arraySignal(new Array(3000).fill(0).map(() => signal("")));
+  const array = arraySignal(new Array(10).fill(0).map(() => signal("")));
 
   array.subscribe(console.log);
 
@@ -27,6 +27,8 @@ const App = () => {
 
   const forOut = For(array, (v, i) => {
     return div(
+      onmount(() => console.log("mounted")),
+      onunmount(() => console.log("unmounted")),
       i,
       input(bind("input", v)),
       v,
@@ -68,9 +70,21 @@ const App = () => {
       }),
       "toggle"
     ),
-    Show(showList, div(forOut)),
+    Show(showList, forOut),
     "some text here"
   );
 };
 
-render(App(), document.getElementById("app")!);
+export function Proof() {
+  return math(
+    mrow(
+      msup(mi("a"), mn("2")),
+      mo("+"),
+      msup(mi("b"), mn("2")),
+      mo("="),
+      msup(mi("c"), mn("2"))
+    )
+  );
+}
+
+render(Proof(), document.getElementById("app")!);

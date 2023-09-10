@@ -1,9 +1,9 @@
-import type { ElementMap, ElementTag, Param, TagsFab } from "../types";
+import type { CommonNamespace, CommonTag, Param, Tags } from "../types";
 import { h } from "./h";
 
-export const tags = new Proxy({} as TagsFab, {
+export const tags = new Proxy({} as Tags, {
   get:
-    <T extends ElementTag>(_: unknown, tag: T) =>
-    (...params: Param<ElementMap[T]>[]) =>
+    <T extends CommonTag>(_: unknown, tag: T) =>
+    (...params: Param<CommonNamespace[T]>[]) =>
       h(tag, ...params)
 });
