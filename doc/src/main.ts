@@ -10,7 +10,7 @@ import {
   arraySignal
 } from "@swrf/core";
 
-const { div, button, h1, input, math, mi, mn, mo, mrow, msup } = tags;
+const { div, button, h1, input, math, mi, mn, mo, mrow, msup, a } = tags;
 const { onclick, onmount, ref, onunmount } = attributes;
 
 const App = () => {
@@ -76,14 +76,20 @@ const App = () => {
 };
 
 export function Proof() {
-  return math(
-    mrow(
-      msup(mi("a"), mn("2")),
-      mo("+"),
-      msup(mi("b"), mn("2")),
-      mo("="),
-      msup(mi("c"), mn("2"))
-    )
+  return div(
+    math(
+      {
+        xmlns: "http://www.w3.org/1998/Math/MathML"
+      },
+      mrow(
+        msup(mi("a"), mn("2")),
+        mo("+"),
+        msup(mi("b"), mn("2")),
+        mo("="),
+        msup(mi("c"), mn("2"))
+      )
+    ),
+    div("hello")
   );
 }
 

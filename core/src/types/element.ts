@@ -33,10 +33,11 @@ export type ClassList = {
   [key in string]?: Readable<boolean>;
 };
 
-type ExtraAttributeMap<E> = {
+type VirtualAttributeMap<E> = {
   onmount?: (e: Event) => void;
   onunmount?: (e: Event) => void;
   ref?: WritableSignal<E | undefined>;
+  xmlns?: string;
 };
 
 export type AttributeMap<T extends BaseElement = BaseElement> = {
@@ -47,4 +48,4 @@ export type AttributeMap<T extends BaseElement = BaseElement> = {
     : key extends "classList"
     ? ClassList
     : Readable<T[key]>;
-} & ExtraAttributeMap<T>;
+} & VirtualAttributeMap<T>;

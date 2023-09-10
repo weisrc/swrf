@@ -1,5 +1,5 @@
 import type { CommonNamespace, CommonTag, Param, Tags } from "../types";
-import { h } from "./h";
+import { h } from "./render";
 
 export const tags = new Proxy({} as Tags, {
   get:
