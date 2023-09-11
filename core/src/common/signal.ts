@@ -7,12 +7,12 @@ export function signal(data?: any) {
   let observers = new Set<() => void>();
   return (...args: any[]) => {
     if (0 in args) {
-      const next = args[0]!;
+      let next = args[0]!;
       if (next !== data || args[1]) {
         data = next;
-        const previous = observers;
+        let previous = observers;
         observers = new Set();
-        for (const o of previous) o();
+        for (let o of previous) o();
       }
     } else {
       observers.add(observer);

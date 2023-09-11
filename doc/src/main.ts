@@ -17,8 +17,6 @@ const App = () => {
   const showList = signal(false);
   const array = arraySignal(new Array(10).fill(0).map(() => signal("")));
 
-  array.subscribe(console.log);
-
   const buttonRef = signal<HTMLButtonElement>();
 
   effect(() => {
@@ -70,27 +68,15 @@ const App = () => {
       }),
       "toggle"
     ),
-    Show(showList, forOut),
+    Show(
+      showList,
+      div(forOut, () => {
+        console.log("rendering");
+        return "There are " + array().length + " items";
+      })
+    ),
     "some text here"
   );
 };
 
-export function Proof() {
-  return div(
-    math(
-      {
-        xmlns: "http://www.w3.org/1998/Math/MathML"
-      },
-      mrow(
-        msup(mi("a"), mn("2")),
-        mo("+"),
-        msup(mi("b"), mn("2")),
-        mo("="),
-        msup(mi("c"), mn("2"))
-      )
-    ),
-    div("hello")
-  );
-}
-
-render(Proof(), document.getElementById("app")!);
+render(App, document.getElementById("app")!);

@@ -1,6 +1,6 @@
 import type { WritableSignal } from "../types";
 
-export const bind = (
+export let bind = (
   event: keyof GlobalEventHandlersEventMap,
   value: WritableSignal<string>
 ) => ({

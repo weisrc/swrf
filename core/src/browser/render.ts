@@ -11,11 +11,14 @@ import type {
 import { replace, tryNode, updateMount } from "./utils";
 import { effect, read } from "../common";
 
-let currentNamespace: string;
+let currentNS: string;
 
-export const render = (lazy: Lazy<BaseElement>, node: BaseElement) => {
-  currentNamespace = node.namespaceURI!;
-  const out = lazy();
+export let render = (
+  component: Component<BaseElement, []>,
+  node: BaseElement
+) => {
+  currentNS = node.namespaceURI!;
+  let out = component()();
   node.append(out);
   updateMount(out);
 };
@@ -28,62 +31,58 @@ export function h<T extends CommonTag>(
 export function h<T extends Component>(
   tag: T,
   ...params: Parameters<T>
-): Lazy<ReturnType<T>>;
+): ReturnType<T>;
 
 export function h(tag: any, ...params: any): any {
   if (typeof tag === "function") {
     return tag(...params);
   }
   return (() => {
-    let previousNamespace = currentNamespace;
-    currentNamespace = params[0]?.xmlns ?? currentNamespace;
-    const element = document.createElementNS(currentNamespace, tag) as any;
+    let previousNS = currentNS;
+    let element = document.createElementNS(currentNS, tag) as any;
+    currentNS = params[0]?.xmlns ?? currentNS;
 
-    for (const param of params) {
+    for (let param of params) {
       element.append("");
-      const empty = element.lastChild;
+      let empty = element.lastChild;
       let current = empty;
-
       effect(() => {
-        const out = tryNode(read(read(param)));
-        const isNode = out instanceof Node;
+        let out = tryNode(read(read(param)));
+        let isNode = out instanceof Node;
         current = replace(current, isNode ? out : empty);
         if (!isNode) {
-          for (const key in out) {
-            const value = out[key];
+          for (let key in out) {
+            let value = out[key];
             if (key === "style") {
-              const style = read(value) as Style;
+              let style = read(value) as Style;
               if (typeof style === "object") {
-                for (const p in style) {
-                  effect(() => (element.style[p] = read(style[p])));
+                for (let p in style) {
+                  effect(() => (element.style[p] = read(style[p])), element);
                 }
               }
             } else if (key === "classList") {
-              const list = read(value) as ClassList;
-              for (const name in list) {
-                effect(() =>
-                  read(list[name])
-                    ? element.classList.add(name)
-                    : element.classList.remove(name)
+              let list = read(value) as ClassList;
+              for (let name in list) {
+                effect(
+                  () =>
+                    read(list[name])
+                      ? element.classList.add(name)
+                      : element.classList.remove(name),
+                  element
                 );
               }
             } else if (key.startsWith("on")) {
-              element.addEventListener(
-                key.slice(2),
-                value as EventListenerOrEventListenerObject
-              );
+              element.addEventListener(key.slice(2), value);
             } else if (key === "ref") {
               value(element);
             } else {
-              effect(() => {
-                element[key] = read(value);
-              });
+              effect(() => (element[key] = read(value)), element);
             }
           }
         }
-      });
+      }, element);
     }
-    currentNamespace = previousNamespace;
+    currentNS = previousNS;
     return element;
   }) as any;
 }

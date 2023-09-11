@@ -1,6 +1,6 @@
 import { render as _render } from "..";
 
-export const DEV = {
+export let DEV = {
   SWRF_RENDER: () => {
     console.warn("Use of render function required for hot module reloads.");
   }
@@ -12,9 +12,9 @@ export let isHMR = false;
 export let iterators: Record<string, number> = {};
 export let recoveredSignalsCount = 0;
 
-export const increaseRecoveredRefCount = () => recoveredSignalsCount++;
+export let increaseRecoveredRefCount = () => recoveredSignalsCount++;
 
-export const render: typeof _render = (fn, root) => {
+export let render: typeof _render = (fn, root) => {
   if (rendered) isHMR = true;
   iterators = {};
   recoveredSignalsCount = 0;

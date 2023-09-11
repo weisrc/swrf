@@ -13,7 +13,10 @@ export type ArraySubscribeFnParameters<T> = {
 }[MutableArrayMethod];
 
 export type ArraySubscribeFn<T> = (
-  ...args: ArraySubscribeFnParameters<T> | ["set", [number, T]]
+  ...args:
+    | ArraySubscribeFnParameters<T>
+    | ["set", [number, T]]
+    | ["update", [T[]]]
 ) => void;
 
 export type ArraySignal<T> = WritableSignal<T[]> &

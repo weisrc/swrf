@@ -1,5 +1,4 @@
-export const WAS_CONNECTED = Symbol();
-
+export const INTERNAL = Symbol();
 export const MUTABLE_ARRAY_METHODS = [
   "pop",
   "push",

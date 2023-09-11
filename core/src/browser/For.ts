@@ -1,27 +1,28 @@
-import { read, effect, signal } from "../common";
+import { effect, read, signal } from "../common";
+import { INTERNAL } from "../constants";
 import type {
+  BaseElement,
+  Fragment,
+  Lazy,
   Props,
   Readable,
-  WritableSignal,
   Signal,
-  Lazy,
-  BaseElement,
-  Fragment
+  WritableSignal
 } from "../types";
-import { updateMount } from "./utils";
+import { nextSibling, updateMount } from "./utils";
 
-const nextSibling = (node: Node) => node?.nextSibling!;
-
-export const For = <T>(
-  props: Props<{ each: T[] }> | Readable<T[]>,
+export let For = <T>(
+  props:
+    | Props<{ each: T[]; [INTERNAL]?: (data: BaseElement[]) => void }>
+    | Readable<T[]>,
   fn: (item: T, i: Signal<number>) => Lazy<BaseElement>
 ): Lazy<Fragment> => {
   return () => {
     let nodes: BaseElement[] = [];
     let cache = new Map<T, BaseElement>();
-    const indices = new WeakMap<Node, WritableSignal<number>>();
-    const head = document.createComment("");
-    const fragment = document.createDocumentFragment() as Fragment;
+    let indices = new WeakMap<Node, WritableSignal<number>>();
+    let head = document.createComment("");
+    let fragment = document.createDocumentFragment() as Fragment;
     fragment.appendChild(head);
     fragment.replaceWith = (next) => {
       head.replaceWith(next);
@@ -29,17 +30,17 @@ export const For = <T>(
       nodes.forEach((node) => updateMount(node));
     };
     effect(() => {
-      const nextNodes: BaseElement[] = [];
-      const nextCache = new Map<T, BaseElement>();
-      const parent = head.parentNode!;
+      let nextNodes: BaseElement[] = [];
+      let nextCache = new Map<T, BaseElement>();
+      let parent = head.parentNode!;
 
-      const items = read((<Props<{ each: T[] }>>props).each ?? props);
+      let items = read((<Props<{ each: T[] }>>props).each ?? props);
       let current = nextSibling(head) as BaseElement;
 
       for (let i = 0; i < items.length; i++) {
-        const item = items[i];
+        let item = items[i];
         let node: BaseElement = null!;
-        const index = signal(i);
+        let index = signal(i);
         node = (!nextCache.has(item) && cache.get(item)) || fn(item, index)();
         indices.get(node)?.(i) ?? indices.set(node, index);
 
@@ -55,7 +56,7 @@ export const For = <T>(
         updateMount(node);
       }
 
-      for (const node of nodes) {
+      for (let node of nodes) {
         if (!nextNodes.includes(node)) {
           parent.removeChild(node);
           updateMount(node);
@@ -63,7 +64,8 @@ export const For = <T>(
       }
       cache = nextCache;
       nodes = nextNodes;
-    });
+      (props as any)[INTERNAL]?.(nodes);
+    }, head);
     return fragment;
   };
 };

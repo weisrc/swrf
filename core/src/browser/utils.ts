@@ -1,7 +1,7 @@
-import { WAS_CONNECTED } from "../constants";
+import { INTERNAL } from "../constants";
 import { BaseElement } from "../types";
 
-export const tryNode = <T>(x: T) =>
+export let tryNode = <T>(x: T) =>
   x instanceof Node
     ? (x as Node)
     : typeof x === "string" || typeof x === "number"
@@ -10,18 +10,24 @@ export const tryNode = <T>(x: T) =>
     ? null
     : x;
 
-export function updateMount(el: BaseElement, willConnect?: boolean) {
-  const isConnected = willConnect ?? el.isConnected;
-  if (!(el as any)[WAS_CONNECTED] == isConnected) {
-    el.dispatchEvent(new Event(isConnected ? "mount" : "unmount"));
-    el.childNodes.forEach((c) => updateMount(c as BaseElement, willConnect));
-    (el as any)[WAS_CONNECTED] = isConnected;
+export function updateMount(element: BaseElement, willBeConnected?: boolean) {
+  let isNowConnected = willBeConnected ?? isConnected(element);
+  if (!(element as any)[INTERNAL] == isNowConnected) {
+    element.dispatchEvent(new Event(isNowConnected ? "mount" : "unmount"));
+    element.childNodes.forEach((c) =>
+      updateMount(c as BaseElement, willBeConnected)
+    );
+    (element as any)[INTERNAL] = isNowConnected;
   }
 }
 
 export function replace(current: BaseElement, next: BaseElement) {
-  updateMount(next, current.isConnected);
+  updateMount(next, isConnected(current));
   current.replaceWith(next);
   updateMount(current);
   return next;
 }
+
+export let nextSibling = (node: Node) => node?.nextSibling!;
+
+export let isConnected = (node: Node) => node.isConnected;

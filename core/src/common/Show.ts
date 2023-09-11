@@ -1,7 +1,7 @@
 import type { Child, Readable, Props } from "../types";
 import { read } from "./read";
 
-export const Show =
+export let Show =
   (
     props: Props<{ when: boolean }> | Readable<boolean>,
     then: Readable<Child>
