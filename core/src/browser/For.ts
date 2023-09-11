@@ -37,6 +37,8 @@ export let For = <T>(
       let items = read((<Props<{ each: T[] }>>props).each ?? props);
       let current = nextSibling(head) as BaseElement;
 
+      console.log("for doing stuff");
+
       for (let i = 0; i < items.length; i++) {
         let item = items[i];
         let node: BaseElement = null!;

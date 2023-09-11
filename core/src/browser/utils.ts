@@ -13,11 +13,11 @@ export let tryNode = <T>(x: T) =>
 export function updateMount(element: BaseElement, willBeConnected?: boolean) {
   let isNowConnected = willBeConnected ?? isConnected(element);
   if (!(element as any)[INTERNAL] == isNowConnected) {
+    (element as any)[INTERNAL] = isNowConnected;
     element.dispatchEvent(new Event(isNowConnected ? "mount" : "unmount"));
     element.childNodes.forEach((c) =>
       updateMount(c as BaseElement, willBeConnected)
     );
-    (element as any)[INTERNAL] = isNowConnected;
   }
 }
 
@@ -31,3 +31,9 @@ export function replace(current: BaseElement, next: BaseElement) {
 export let nextSibling = (node: Node) => node?.nextSibling!;
 
 export let isConnected = (node: Node) => node.isConnected;
+
+export let listen = (
+  node: Node,
+  type: string,
+  listener: EventListenerOrEventListenerObject
+) => node.addEventListener(type, listener);

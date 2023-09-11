@@ -8,7 +8,7 @@ import type {
   Param,
   Style
 } from "../types";
-import { replace, tryNode, updateMount } from "./utils";
+import { listen, replace, tryNode, updateMount } from "./utils";
 import { effect, read } from "../common";
 
 let currentNS: string;
@@ -72,7 +72,7 @@ export function h(tag: any, ...params: any): any {
                 );
               }
             } else if (key.startsWith("on")) {
-              element.addEventListener(key.slice(2), value);
+              listen(element, key.slice(2), value);
             } else if (key === "ref") {
               value(element);
             } else {

@@ -1,27 +1,22 @@
 import {
+  arraySignal,
   attributes,
-  render,
-  tags,
-  signal,
-  For,
-  Show,
   bind,
-  effect,
-  arraySignal
+  For,
+  render,
+  Show,
+  signal,
+  tags
 } from "@swrf/core";
 
-const { div, button, h1, input, math, mi, mn, mo, mrow, msup, a } = tags;
+const { div, button, h1, input } = tags;
 const { onclick, onmount, ref, onunmount } = attributes;
 
 const App = () => {
   const showList = signal(false);
-  const array = arraySignal(new Array(10).fill(0).map(() => signal("")));
+  const array = arraySignal(new Array(1).fill(0).map(() => signal("")));
 
   const buttonRef = signal<HTMLButtonElement>();
-
-  effect(() => {
-    console.log("effect", buttonRef());
-  });
 
   const forOut = For(array, (v, i) => {
     return div(
@@ -68,13 +63,7 @@ const App = () => {
       }),
       "toggle"
     ),
-    Show(
-      showList,
-      div(forOut, () => {
-        console.log("rendering");
-        return "There are " + array().length + " items";
-      })
-    ),
+    Show(showList, forOut()),
     "some text here"
   );
 };
