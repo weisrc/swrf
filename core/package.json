@@ -20,11 +20,11 @@
     }
   },
   "scripts": {
-    "dev": "vite",
     "build:types": "tsc",
     "build:browser": "vite build --mode browser",
     "build:browser-dev": "vite build --mode browser-dev",
-    "build:browser-slim": "vite build --mode browser-slim"
+    "build:browser-slim": "vite build --mode browser-slim",
+    "build": "run-p build:*"
   },
   "devDependencies": {
     "typescript": "^4.6.4",
