@@ -1,4 +1,5 @@
 export const INTERNAL = Symbol();
+export const VERSION = Symbol();
 export const MUTABLE_ARRAY_METHODS = [
   "pop",
   "push",

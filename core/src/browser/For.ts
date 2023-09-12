@@ -1,4 +1,4 @@
-import { effect, read, signal } from "../common";
+import { affect, read, signal } from "../common";
 import { INTERNAL } from "../constants";
 import type {
   BaseElement,
@@ -29,7 +29,7 @@ export let For = <T>(
       fragment.append(head, ...nodes);
       nodes.forEach((node) => updateMount(node));
     };
-    effect(() => {
+    affect(head, () => {
       let nextNodes: BaseElement[] = [];
       let nextCache = new Map<T, BaseElement>();
       let parent = head.parentNode!;
@@ -67,7 +67,7 @@ export let For = <T>(
       cache = nextCache;
       nodes = nextNodes;
       (props as any)[INTERNAL]?.(nodes);
-    }, head);
+    });
     return fragment;
   };
 };

@@ -9,7 +9,7 @@ import type {
   Style
 } from "../types";
 import { listen, replace, tryNode, updateMount } from "./utils";
-import { effect, read } from "../common";
+import { affect, read } from "../common";
 
 let currentNS: string;
 
@@ -46,7 +46,7 @@ export function h(tag: any, ...params: any): any {
       element.append("");
       let empty = element.lastChild;
       let current = empty;
-      effect(() => {
+      affect(element, () => {
         let out = tryNode(read(read(param)));
         let isNode = out instanceof Node;
         current = replace(current, isNode ? out : empty);
@@ -57,18 +57,16 @@ export function h(tag: any, ...params: any): any {
               let style = read(value) as Style;
               if (typeof style === "object") {
                 for (let p in style) {
-                  effect(() => (element.style[p] = read(style[p])), element);
+                  affect(element, () => (element.style[p] = read(style[p])));
                 }
               }
             } else if (key === "classList") {
               let list = read(value) as ClassList;
               for (let name in list) {
-                effect(
-                  () =>
-                    read(list[name])
-                      ? element.classList.add(name)
-                      : element.classList.remove(name),
-                  element
+                affect(element, () =>
+                  read(list[name])
+                    ? element.classList.add(name)
+                    : element.classList.remove(name)
                 );
               }
             } else if (key.startsWith("on")) {
@@ -76,11 +74,11 @@ export function h(tag: any, ...params: any): any {
             } else if (key === "ref") {
               value(element);
             } else {
-              effect(() => (element[key] = read(value)), element);
+              affect(element, () => (element[key] = read(value)));
             }
           }
         }
-      }, element);
+      });
     }
     currentNS = previousNS;
     return element;
