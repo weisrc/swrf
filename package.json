@@ -5,7 +5,8 @@
   },
   "workspaces": [
     "core",
-    "ssr"
+    "ssr",
+    "doc"
   ],
   "devDependencies": {
     "bun-types": "^1.0.1",

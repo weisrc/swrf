@@ -2,6 +2,7 @@ import {
   arraySignal,
   attributes,
   bind,
+  effect,
   For,
   render,
   Show,
@@ -15,6 +16,10 @@ const { onclick, onmount, ref, onunmount } = attributes;
 const App = () => {
   const showList = signal(false);
   const array = arraySignal(new Array(1).fill(0).map(() => signal("")));
+
+  effect(() => {
+    console.log("effect", showList());
+  });
 
   const buttonRef = signal<HTMLButtonElement>();
 

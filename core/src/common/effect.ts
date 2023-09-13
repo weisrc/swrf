@@ -7,39 +7,40 @@ export let effect = (fn: () => void): EffectControl => {
   let deps = new Set<EffectSource>();
   let sum = -1;
 
-  let run = () => {
+  let activate = () => {
     if (sum != setActive(false)) {
       let previous = ctx;
       ctx = new Set();
       fn();
       deps = ctx;
       ctx = previous;
-      sum = setActive(true);
     }
+    sum = setActive(true);
     scheduled = false;
   };
+
   let handler: EffectHandler = (immediate) => {
     if (immediate) {
-      run();
+      activate();
     } else if (!scheduled) {
       scheduled = true;
-      setTimeout(run);
+      setTimeout(activate);
     }
   };
   let setActive = (active?: boolean) => {
-    let sum = 0;
+    let curSum = 0;
     for (let signal of deps) {
       signal.fx[active ? "add" : "delete"](handler);
-      sum += signal.v;
+      curSum += signal.v;
     }
-    return sum;
+    return curSum;
   };
 
-  run();
+  activate();
 
   return (active, immediate) => {
-    setActive(active);
-    handler(immediate);
+    if (active) handler(immediate);
+    else setActive(active);
   };
 };
 
