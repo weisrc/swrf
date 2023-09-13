@@ -12,10 +12,13 @@ export let tryNode = <T>(x: T) =>
 
 export function updateMount(element: BaseElement, willBeConnected?: boolean) {
   let isNowConnected = willBeConnected ?? isConnected(element);
+  let eventName = isNowConnected ? "mount" : "unmount";
+  let preEventName = "pre" + eventName;
 
   if (!(element as any)[INTERNAL] == isNowConnected) {
     (element as any)[INTERNAL] = isNowConnected;
-    element.dispatchEvent(new Event(isNowConnected ? "mount" : "unmount"));
+    element.dispatchEvent(new Event(preEventName));
+    setTimeout(() => element.dispatchEvent(new Event(eventName)));
     element.childNodes.forEach((c) =>
       updateMount(c as BaseElement, willBeConnected)
     );
