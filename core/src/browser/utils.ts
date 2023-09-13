@@ -12,6 +12,7 @@ export let tryNode = <T>(x: T) =>
 
 export function updateMount(element: BaseElement, willBeConnected?: boolean) {
   let isNowConnected = willBeConnected ?? isConnected(element);
+
   if (!(element as any)[INTERNAL] == isNowConnected) {
     (element as any)[INTERNAL] = isNowConnected;
     element.dispatchEvent(new Event(isNowConnected ? "mount" : "unmount"));
