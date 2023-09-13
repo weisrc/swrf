@@ -2,7 +2,7 @@ import { EffectControl, EffectHandler, EffectSource } from "../types";
 
 export let ctx: Set<EffectSource> | undefined;
 
-export let effect = (fn: () => void, inactive?: boolean): EffectControl => {
+export let effect = (fn: () => void, idle?: boolean): EffectControl => {
   let scheduled = false;
   let deps = new Set<EffectSource>();
   let sum = -1;
@@ -36,7 +36,7 @@ export let effect = (fn: () => void, inactive?: boolean): EffectControl => {
     return curSum;
   };
 
-  if (!inactive) activate();
+  if (!idle) activate();
 
   return (active, immediate) => {
     if (active) handler(immediate);
