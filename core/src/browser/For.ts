@@ -1,4 +1,4 @@
-import { affect, read, signal } from "../common";
+import { read, signal } from "../common";
 import { INTERNAL } from "../constants";
 import type {
   BaseElement,
@@ -9,6 +9,7 @@ import type {
   Signal,
   WritableSignal
 } from "../types";
+import { affect } from "./affect";
 import { nextSibling, updateMount } from "./utils";
 
 export let For = <T>(

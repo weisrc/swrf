@@ -4,11 +4,17 @@ export type MutableArrayMethod = (typeof MUTABLE_ARRAY_METHODS)[number];
 
 export type Signal<T> = () => T;
 
-export interface WritableSignal<T> extends Signal<T> {
-  (value?: T, force?: boolean): T;
+export type EffectHandler = (immediate?: boolean) => void;
+
+export type EffectSource = {
   v: number;
-  subs: Set<() => void>;
-  data: T;
+  fx: Set<EffectHandler>;
+};
+
+export type EffectControl = (active?: boolean, immediate?: boolean) => void;
+
+export interface WritableSignal<T> extends Signal<T>, EffectSource {
+  (value?: T, force?: boolean, immediate?: boolean): T;
 }
 
 export type Readable<T> = T | Signal<T>;

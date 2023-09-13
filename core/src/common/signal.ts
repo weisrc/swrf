@@ -1,4 +1,4 @@
-import type { WritableSignal } from "../types";
+import type { EffectHandler, WritableSignal } from "../types";
 import { ctx } from "./effect";
 
 export function signal<T>(): WritableSignal<T | undefined>;
@@ -10,7 +10,7 @@ export function signal(data?: unknown) {
       if (next !== data || args[1]) {
         data = next;
         signal.v++;
-        for (let s of signal.subs) s();
+        for (let fx of signal.fx) fx(args[2]);
       }
     } else {
       ctx?.add(signal);
@@ -18,6 +18,6 @@ export function signal(data?: unknown) {
     return data;
   }) as WritableSignal<unknown>;
   signal.v = 0;
-  signal.subs = new Set<() => void>();
+  signal.fx = new Set<EffectHandler>();
   return signal;
 }

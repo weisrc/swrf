@@ -9,7 +9,8 @@ import type {
   Style
 } from "../types";
 import { listen, replace, tryNode, updateMount } from "./utils";
-import { affect, read } from "../common";
+import { read } from "../common";
+import { affect } from "./affect";
 
 let currentNS: string;
 

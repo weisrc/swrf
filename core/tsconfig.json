@@ -17,9 +17,9 @@
     "outDir": "dist/types",
     "emitDeclarationOnly": true,
     "removeComments": false,
-    "jsx": "react",
+    "jsx": "react"
   },
-  "include": ["./src", "jsx.d.ts"],
+  "include": ["src"],
   "ts-node": {
     "transpileOnly": true
   }
