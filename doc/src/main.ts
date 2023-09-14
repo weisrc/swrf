@@ -11,7 +11,7 @@ import {
 } from "@swrf/core";
 
 const { div, button, h1, input } = tags;
-const { onclick, onmount, ref, onunmount } = attributes;
+const { onclick, $mount, ref, $unmount } = attributes;
 
 const App = () => {
   const showList = signal(false);
@@ -25,16 +25,19 @@ const App = () => {
 
   const forOut = For(array, (v, i) => {
     return div(
-      onmount(() => console.log("mounted")),
-      onunmount(() => console.log("unmounted")),
+      $mount(() => console.log("mounted")),
+      $unmount(() => console.log("unmounted")),
       i,
       input(bind("input", v)),
       v,
       input({ placeholder: "placeholder" }),
       button(
         onclick(() => {
-          array.splice(i(), 1);
+          return () => array.splice(i(), 1);
         }),
+        {
+          onclick: () => () => array.splice(i(), 1)
+        },
         "remove"
       ),
       Show(
@@ -53,18 +56,18 @@ const App = () => {
   });
 
   return div(
-    onmount(() => console.log("mounted 2")),
+    $mount(() => console.log("mounted 2")),
     h1("Hello World!"),
     button(
       ref(buttonRef),
       onclick(() => {
-        array.unshift(signal(""));
+        return () => array.unshift(signal(""));
       }),
       "add"
     ),
     button(
       onclick(() => {
-        showList(!showList());
+        return () => showList(!showList());
       }),
       "toggle"
     ),

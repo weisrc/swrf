@@ -1,9 +1,7 @@
-import type { EffectHandler, WritableSignal } from "../types";
+import type { EffectHandler, SignalFn, WritableSignal } from "../types";
 import { ctx } from "./effect";
 
-export function signal<T>(): WritableSignal<T | undefined>;
-export function signal<T>(data: T): WritableSignal<T>;
-export function signal(data?: unknown) {
+export let signal: SignalFn = (data?: unknown) => {
   let signal = ((...args: any[]) => {
     if (0 in args) {
       let next = args[0]!;
@@ -20,4 +18,4 @@ export function signal(data?: unknown) {
   signal.v = 0;
   signal.fx = new Set<EffectHandler>();
   return signal;
-}
+};

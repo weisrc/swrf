@@ -1,6 +1,6 @@
 import { signal } from "../common";
 import { INTERNAL } from "../constants";
-import type {
+import {
   ArraySignal,
   BaseElement,
   Fragment,
@@ -18,7 +18,6 @@ export let FastFor = <T>(
   let each = signal(array());
 
   return () => {
-
     let nodes: BaseElement[] = [];
 
     console.log(nodes);
@@ -30,7 +29,7 @@ export let FastFor = <T>(
     return For(
       {
         each,
-        [INTERNAL]: (nextNodes) => nodes = nextNodes
+        [INTERNAL]: (nextNodes) => (nodes = nextNodes)
       },
       fn
     )();

@@ -5,6 +5,6 @@ export let bind = (
   value: WritableSignal<string>
 ) => ({
   value,
-  ["on" + event]: (e: Event) =>
+  ["$" + event]: (e: Event) =>
     value((e.currentTarget as HTMLInputElement)?.value)
 });

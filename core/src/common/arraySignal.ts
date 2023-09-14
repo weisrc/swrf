@@ -1,4 +1,4 @@
-import { signal } from ".";
+import { signal } from "./signal";
 import { MUTABLE_ARRAY_METHODS } from "../constants";
 import { ArraySignal } from "../types";
 
@@ -31,7 +31,6 @@ export function arraySignal(data: any[] = []) {
       return value;
     },
     apply(_, __, args: any[]) {
-      
       return array(...args);
     }
   });

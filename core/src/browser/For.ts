@@ -1,6 +1,6 @@
 import { read, signal } from "../common";
 import { INTERNAL } from "../constants";
-import type {
+import {
   BaseElement,
   Fragment,
   Lazy,
@@ -10,7 +10,7 @@ import type {
   WritableSignal
 } from "../types";
 import { affect } from "./affect";
-import { nextSibling, updateMount } from "./utils";
+import { doc, nextSibling, updateMount } from "./utils";
 
 export let For = <T>(
   props:
@@ -22,8 +22,8 @@ export let For = <T>(
     let nodes: BaseElement[] = [];
     let cache = new Map<T, BaseElement>();
     let indices = new WeakMap<Node, WritableSignal<number>>();
-    let head = document.createComment("");
-    let fragment = document.createDocumentFragment() as Fragment;
+    let head = doc.createComment("");
+    let fragment = doc.createDocumentFragment() as Fragment;
     fragment.appendChild(head);
     fragment.replaceWith = (next) => {
       head.replaceWith(next);
@@ -37,8 +37,6 @@ export let For = <T>(
 
       let items = read((<Props<{ each: T[] }>>props).each ?? props);
       let current = nextSibling(head) as BaseElement;
-
-      console.log("for doing stuff");
 
       for (let i = 0; i < items.length; i++) {
         let item = items[i];
@@ -59,12 +57,11 @@ export let For = <T>(
         updateMount(node);
       }
 
-      for (let node of nodes) {
-        if (!nextNodes.includes(node)) {
-          parent.removeChild(node);
-          updateMount(node);
-        }
-      }
+      nodes.forEach(
+        (node) =>
+          nextNodes.includes(node) || updateMount(parent.removeChild(node))
+      );
+
       cache = nextCache;
       nodes = nextNodes;
       (props as any)[INTERNAL]?.(nodes);

@@ -1,4 +1,5 @@
+import { getType } from "../browser/utils";
 import { Readable } from "../types";
 
 export let read = <T>(x: Readable<T>): T =>
-  x instanceof Function ? (x as any)() : x;
+  getType(x)[0] == "f" ? (x as any)() : x;

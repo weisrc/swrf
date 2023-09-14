@@ -11,7 +11,7 @@ export type EffectSource = {
   fx: Set<EffectHandler>;
 };
 
-export type EffectControl = (active?: boolean, immediate?: boolean) => void;
+export type EffectControl = (active?: boolean) => number;
 
 export interface WritableSignal<T> extends Signal<T>, EffectSource {
   (value?: T, force?: boolean, immediate?: boolean): T;

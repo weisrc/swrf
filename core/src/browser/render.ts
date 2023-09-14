@@ -1,16 +1,15 @@
-import type {
-  BaseElement,
-  ClassList,
-  CommonNamespace,
-  CommonTag,
-  Component,
-  Lazy,
-  Param,
-  Style
-} from "../types";
-import { listen, replace, tryNode, updateMount } from "./utils";
 import { read } from "../common";
+import type { BaseElement, ClassList, Component, HFn, Style } from "../types";
 import { affect } from "./affect";
+import {
+  doc,
+  getType,
+  isNode,
+  listen,
+  replace,
+  tryNode,
+  updateMount
+} from "./utils";
 
 let currentNS: string;
 
@@ -24,54 +23,46 @@ export let render = (
   updateMount(out);
 };
 
-export function h<T extends CommonTag>(
-  tag: T,
-  ...params: Param<CommonNamespace[T]>[]
-): Lazy<CommonNamespace[T]>;
+let forKVAffect = (
+  element: Node,
+  obj: any,
+  fn: (key: string, value: any) => void
+) => {
+  for (let key in obj) affect(element, () => fn(key, read(obj[key])));
+};
 
-export function h<T extends Component>(
-  tag: T,
-  ...params: Parameters<T>
-): ReturnType<T>;
-
-export function h(tag: any, ...params: any): any {
-  if (typeof tag === "function") {
+export let h: HFn = (tag: any, ...params: any): any => {
+  if (getType(tag)[0] == "f") {
     return tag(...params);
   }
   return (() => {
     let previousNS = currentNS;
-    let element = document.createElementNS(currentNS, tag) as any;
+    let element = doc.createElementNS(currentNS, tag) as any;
     currentNS = params[0]?.xmlns ?? currentNS;
 
-    for (let param of params) {
+    params.map((param: any) => {
       element.append("");
       let empty = element.lastChild;
       let current = empty;
       affect(element, () => {
         let out = tryNode(read(read(param)));
-        let isNode = out instanceof Node;
-        current = replace(current, isNode ? out : empty);
-        if (!isNode) {
+        let gotNode = isNode(out);
+        current = replace(current, gotNode ? out : empty);
+        if (!gotNode) {
           for (let key in out) {
             let value = out[key];
-            if (key === "style") {
-              let style = read(value) as Style;
-              if (typeof style === "object") {
-                for (let p in style) {
-                  affect(element, () => (element.style[p] = read(style[p])));
-                }
-              }
-            } else if (key === "classList") {
-              let list = read(value) as ClassList;
-              for (let name in list) {
-                affect(element, () =>
-                  read(list[name])
-                    ? element.classList.add(name)
-                    : element.classList.remove(name)
-                );
-              }
-            } else if (key.startsWith("on")) {
-              listen(element, key.slice(2), value);
+            if (key == "style") {
+              forKVAffect(
+                element,
+                value as Style,
+                (k, v) => (element[key][k] = v)
+              );
+            } else if (key == "classList") {
+              forKVAffect(element, value as ClassList, (k, v) =>
+                element[key].toggle(k, v)
+              );
+            } else if (key[0] == "$") {
+              listen(element, key.slice(1), value);
             } else if (key === "ref") {
               value(element);
             } else {
@@ -80,8 +71,8 @@ export function h(tag: any, ...params: any): any {
           }
         }
       });
-    }
+    });
     currentNS = previousNS;
     return element;
   }) as any;
-}
+};

@@ -73,7 +73,7 @@ describe("effect", () => {
   test("should not rerun if inactive despite version changes", () => {
     const source = createSource();
     let count = 0;
-    const control = effect(() => {
+    const [_, control] = effect(() => {
       count++;
       readSource(source);
     });
@@ -116,7 +116,7 @@ describe("effect", () => {
   test("should immediately rerun if version changed during inactivity on active", () => {
     const source = createSource();
     let count = 0;
-    const control = effect(() => {
+    const [handler, control] = effect(() => {
       count++;
       readSource(source);
     });
@@ -124,7 +124,7 @@ describe("effect", () => {
     control(false);
     immediateUpdateSource(source);
     expect(count).toBe(1);
-    control(true, true);
+    handler(true);
     expect(count).toBe(2);
   });
 });

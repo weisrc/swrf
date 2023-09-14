@@ -1,4 +1,4 @@
-import { Readable, WritableSignal } from "./base";
+import { Readable, Signal, WritableSignal } from "./base";
 import { MathMLTag } from "./math";
 
 export type BaseNamespace = Readonly<Record<string, Element>>;
@@ -34,14 +34,16 @@ export type ClassList = {
 };
 
 type VirtualAttributeMap<E> = {
-  onmount?: (e: Event) => void;
-  onunmount?: (e: Event) => void;
+  $mount?: (e: Event) => void;
+  $unmount?: (e: Event) => void;
   ref?: WritableSignal<E | undefined>;
   xmlns?: string;
 };
 
 export type AttributeMap<T extends BaseElement = BaseElement> = {
-  [key in keyof T]?: key extends `on${keyof ElementEventMap}`
+  [key in keyof T]?: key extends `on${string}`
+    ? Signal<T[key]>
+    : key extends `\$${string}`
     ? T[key]
     : key extends "style"
     ? Readable<Style> | Readable<string>

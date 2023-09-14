@@ -1,36 +1,44 @@
 import { INTERNAL } from "../constants";
 import { BaseElement } from "../types";
 
-export let tryNode = <T>(x: T) =>
-  x instanceof Node
-    ? (x as Node)
-    : typeof x === "string" || typeof x === "number"
-    ? document.createTextNode(x as string)
-    : typeof x === "boolean"
-    ? null
-    : x;
+export let doc = document;
 
-export function updateMount(element: BaseElement, willBeConnected?: boolean) {
+export let tryNode = <T>(x: T) => {
+  let t = getType(x);
+  return isNode(x)
+    ? x
+    : t == "boolean"
+    ? null
+    : t == "string" || t[0] == "n"
+    ? doc.createTextNode(x as string)
+    : x;
+};
+
+export let getType = (x: any) => typeof x;
+
+export let isNode = (x: any): x is Node => x instanceof Node;
+
+export let updateMount = (element: BaseElement, willBeConnected?: boolean) => {
   let isNowConnected = willBeConnected ?? isConnected(element);
-  let eventName = isNowConnected ? "mount" : "unmount";
-  let preEventName = "pre" + eventName;
+  let eventName = (isNowConnected ? "" : "un") + "mount";
+  let dispatchEvent = (name: string) => element.dispatchEvent(new Event(name));
 
   if (!(element as any)[INTERNAL] == isNowConnected) {
     (element as any)[INTERNAL] = isNowConnected;
-    element.dispatchEvent(new Event(preEventName));
-    setTimeout(() => element.dispatchEvent(new Event(eventName)));
+    dispatchEvent("pre" + eventName);
+    setTimeout(dispatchEvent, 0, eventName);
     element.childNodes.forEach((c) =>
       updateMount(c as BaseElement, willBeConnected)
     );
   }
-}
+};
 
-export function replace(current: BaseElement, next: BaseElement) {
+export let replace = (current: BaseElement, next: BaseElement) => {
   updateMount(next, isConnected(current));
   current.replaceWith(next);
   updateMount(current);
   return next;
-}
+};
 
 export let nextSibling = (node: Node) => node?.nextSibling!;
 
