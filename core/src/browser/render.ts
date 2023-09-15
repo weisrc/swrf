@@ -40,7 +40,7 @@ export let h: HFn = (tag: any, ...params: any): any => {
     let element = doc.createElementNS(currentNS, tag) as any;
     currentNS = params[0]?.xmlns ?? currentNS;
 
-    params.map((param: any) => {
+    params.flat().map((param: any) => {
       element.append("");
       let empty = element.lastChild;
       let current = empty;

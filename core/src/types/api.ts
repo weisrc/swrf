@@ -57,4 +57,7 @@ export type Props<T extends Record<string, unknown>> = {
   [key in keyof T]: Readable<T[key]>;
 };
 
-export type Param<T extends BaseElement> = AttributeMap<T> | Readable<Child>;
+export type Param<T extends BaseElement> =
+  | AttributeMap<T>
+  | Readable<Child>
+  | Readable<Child>[];

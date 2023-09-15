@@ -72,7 +72,7 @@ const App = () => {
       "toggle"
     ),
     Show(showList, forOut()),
-    "some text here"
+    "some text here",
   );
 };
 
