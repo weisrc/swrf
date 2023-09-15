@@ -34,9 +34,11 @@ export let updateMount = (element: BaseElement, willBeConnected?: boolean) => {
 };
 
 export let replace = (current: BaseElement, next: BaseElement) => {
-  updateMount(next, isConnected(current));
-  current.replaceWith(next);
-  updateMount(current);
+  if (current != next) {
+    updateMount(next, isConnected(current));
+    current.replaceWith(next);
+    updateMount(current);
+  }
   return next;
 };
 

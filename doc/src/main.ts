@@ -2,8 +2,8 @@ import {
   arraySignal,
   attributes,
   bind,
-  effect,
   For,
+  fastFor,
   render,
   Show,
   signal,
@@ -11,33 +11,31 @@ import {
 } from "@swrf/core";
 
 const { div, button, h1, input } = tags;
-const { onclick, $mount, ref, $unmount } = attributes;
+const { onclick, ref } = attributes;
 
 const App = () => {
   const showList = signal(false);
-  const array = arraySignal(new Array(1).fill(0).map(() => signal("")));
 
-  effect(() => {
-    console.log("effect", showList());
-  });
+  const array = arraySignal(
+    Array(1000)
+      .fill(0)
+      .map((_, i) => signal(`${i}`))
+  );
 
   const buttonRef = signal<HTMLButtonElement>();
 
-  const forOut = For(array, (v, i) => {
+  const [_, forOut] = fastFor(array, (v) => {
     return div(
-      $mount(() => console.log("mounted")),
-      $unmount(() => console.log("unmounted")),
-      i,
       input(bind("input", v)),
       v,
       input({ placeholder: "placeholder" }),
       button(
         onclick(() => {
-          return () => array.splice(i(), 1);
+          return () => {
+            const i = array.indexOf(v);
+            array.splice(i, 1);
+          };
         }),
-        {
-          onclick: () => () => array.splice(i(), 1)
-        },
         "remove"
       ),
       Show(
@@ -56,12 +54,13 @@ const App = () => {
   });
 
   return div(
-    $mount(() => console.log("mounted 2")),
     h1("Hello World!"),
     button(
       ref(buttonRef),
       onclick(() => {
-        return () => array.unshift(signal(""));
+        return () => {
+          array.unshift(signal(""));
+        };
       }),
       "add"
     ),
@@ -71,8 +70,7 @@ const App = () => {
       }),
       "toggle"
     ),
-    Show(showList, forOut()),
-    "some text here",
+    forOut()
   );
 };
 

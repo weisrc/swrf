@@ -12,10 +12,15 @@ import {
 import { affect } from "./affect";
 import { doc, nextSibling, updateMount } from "./utils";
 
+export type ForProps<T> =
+  | Props<{
+      each: T[];
+      [INTERNAL]?: (nodes: BaseElement[], cache: Map<T, BaseElement>) => void;
+    }>
+  | Readable<T[]>;
+
 export let For = <T>(
-  props:
-    | Props<{ each: T[]; [INTERNAL]?: (data: BaseElement[]) => void }>
-    | Readable<T[]>,
+  props: ForProps<T>,
   fn: (item: T, i: Signal<number>) => Lazy<BaseElement>
 ): Lazy<Fragment> => {
   return () => {
@@ -28,7 +33,7 @@ export let For = <T>(
     fragment.replaceWith = (next) => {
       head.replaceWith(next);
       fragment.append(head, ...nodes);
-      nodes.forEach((node) => updateMount(node));
+      nodes.map((node) => updateMount(node));
     };
     affect(head, () => {
       let nextNodes: BaseElement[] = [];
@@ -57,14 +62,14 @@ export let For = <T>(
         updateMount(node);
       }
 
-      nodes.forEach(
+      nodes.map(
         (node) =>
           nextNodes.includes(node) || updateMount(parent.removeChild(node))
       );
 
       cache = nextCache;
       nodes = nextNodes;
-      (props as any)[INTERNAL]?.(nodes);
+      (props as any)[INTERNAL]?.(nodes, cache, indices);
     });
     return fragment;
   };

@@ -16,7 +16,14 @@ export function arraySignal(data: any[] = []) {
   return new Proxy(array, {
     get(_, key: any) {
       if (key === "subscribe") return subscribe;
-      if (!MUTABLE_ARRAY_METHODS.includes(key)) return array()[key];
+      if (!MUTABLE_ARRAY_METHODS.includes(key)) {
+        let value = array()[key];
+        if ((typeof value)[0] == "f") {
+          return value.bind(array());
+        } else {
+          return value;
+        }
+      }
       return (...args: any[]) => {
         let result = array()[key](...args);
         array(array(), true);
